@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DAYMARK - Every day leaves a mark</title>
+  <meta name="description" content="A personal diary and journaling app. Document reflections, track consistency, generate summaries. Offline-first. Built with Flutter.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a href="#" class="nav-wordmark">DAYMARK</a>
+      <div class="nav-links">
+        <a href="#features" class="nav-link">Features</a>
+        <a href="#architecture" class="nav-link">Architecture</a>
+        <a href="#stack" class="nav-link">Stack</a>
+        <a href="https://github.com/arundaya24/DayMark" class="btn btn-nav" target="_blank" rel="noopener">
+          View on GitHub
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M5 3h8v8M13 3L3 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+        <span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#features" class="mobile-menu-link">Features</a>
+    <a href="#architecture" class="mobile-menu-link">Architecture</a>
+    <a href="#stack" class="mobile-menu-link">Stack</a>
+    <a href="https://github.com/arundaya24/DayMark" class="mobile-menu-link" target="_blank" rel="noopener">GitHub</a>
+  </div>
+
+  <main>
+    <!-- Hero -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-layout">
+          <div class="hero-content">
+            <p class="hero-label">personal journal for android</p>
+            <h1 class="hero-title">Every day<br>leaves a mark.</h1>
+            <p class="hero-desc">A private, offline-first diary that tracks your reflections, visualizes consistency through a contribution heatmap, and synthesizes your written journey into structured summaries.</p>
+            <div class="hero-actions">
+              <a href="https://github.com/arundaya24/DayMark" class="btn btn-primary shimmer-wrap" target="_blank" rel="noopener">
+                <span class="shimmer-layer"></span>
+                Get the Source
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M5 3h8v8M13 3L3 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </a>
+              <a href="#features" class="btn btn-secondary">See how it works</a>
+            </div>
+            <div class="hero-stats">
+              <div class="hero-stat">
+                <span class="hero-stat-value">100%</span>
+                <span class="hero-stat-label">offline capable</span>
+              </div>
+              <div class="hero-stat-divider"></div>
+              <div class="hero-stat">
+                <span class="hero-stat-value">0</span>
+                <span class="hero-stat-label">accounts required</span>
+              </div>
+              <div class="hero-stat-divider"></div>
+              <div class="hero-stat">
+                <span class="hero-stat-value">SQLite</span>
+                <span class="hero-stat-label">local storage</span>
+              </div>
+            </div>
+          </div>
+          <div class="hero-visual">
+            <div class="hero-phone">
+              <div class="phone-frame">
+                <div class="phone-screen">
+                  <!-- Simulated Dashboard UI -->
+                  <div class="sim-statusbar">
+                    <span class="sim-time">12:28</span>
+                    <span class="sim-icons">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="6" width="20" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="6" y="9" width="10" height="6" rx="1" fill="currentColor"/></svg>
+                    </span>
+                  </div>
+                  <div class="sim-greeting">Good afternoon</div>
+                  <div class="sim-date">Friday, 22 November</div>
+                  <div class="sim-streak-row">
+                    <div class="sim-streak-badge">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="#F59E0B"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                      <span>14 day streak</span>
+                    </div>
+                  </div>
+                  <div class="sim-card sim-cta-card">
+                    <span class="sim-cta-text">Every day leaves a mark.</span>
+                    <div class="sim-cta-btn">Mark Today</div>
+                  </div>
+                  <div class="sim-stats-row">
+                    <div class="sim-stat-card">
+                      <span class="sim-stat-title">Current</span>
+                      <span class="sim-stat-num">14</span>
+                    </div>
+                    <div class="sim-stat-card">
+                      <span class="sim-stat-title">Longest</span>
+                      <span class="sim-stat-num">31</span>
+                    </div>
+                  </div>
+                  <div class="sim-heatmap-section">
+                    <span class="sim-section-label">contributions</span>
+                    <div class="sim-heatmap" id="simHeatmap"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Bento Grid -->
+    <section class="section" id="features">
+      <div class="container">
+        <div class="section-header">
+          <p class="section-label">capabilities</p>
+          <h2 class="section-title">Write. Track. Reflect.</h2>
+        </div>
+
+        <div class="bento-grid">
+          <!-- Card 1: Journal - tall left -->
+          <div class="bento-card bento-tall">
+            <div class="bento-card-inner">
+              <div class="bento-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+              </div>
+              <h3 class="bento-title">Daily journal</h3>
+              <p class="bento-desc">Titles, content, categories, tags, and mood tracking. Full-text search across everything you have written. Pin entries that matter.</p>
+              <div class="bento-visual bento-journal-visual">
+                <div class="bento-entry">
+                  <div class="bento-entry-cat" style="--cat-color: var(--clr-emerald)">learning</div>
+                  <div class="bento-entry-title">Understanding state management</div>
+                  <div class="bento-entry-meta">22 Nov 2026</div>
+                </div>
+                <div class="bento-entry">
+                  <div class="bento-entry-cat" style="--cat-color: var(--clr-gold)">reflection</div>
+                  <div class="bento-entry-title">On patience and consistency</div>
+                  <div class="bento-entry-meta">21 Nov 2026</div>
+                </div>
+                <div class="bento-entry">
+                  <div class="bento-entry-cat" style="--cat-color: var(--clr-cyan)">work</div>
+                  <div class="bento-entry-title">Sprint review notes</div>
+                  <div class="bento-entry-meta">20 Nov 2026</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2: Heatmap - wide top right -->
+          <div class="bento-card bento-wide">
+            <div class="bento-card-inner">
+              <div class="bento-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              </div>
+              <h3 class="bento-title">Contribution heatmap</h3>
+              <p class="bento-desc">Calendar-based activity visualization with intensity gradation. Tracks streaks with timezone-aware local date accuracy.</p>
+              <div class="bento-visual bento-heatmap-visual">
+                <div class="bento-heatmap-grid" id="bentoHeatmap"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3: Summary - compact -->
+          <div class="bento-card">
+            <div class="bento-card-inner">
+              <div class="bento-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              </div>
+              <h3 class="bento-title">Summaries and PDF export</h3>
+              <p class="bento-desc">Select any date range. The app generates structured overviews of your achievements, learnings, and challenges. Export as a formatted PDF document.</p>
+            </div>
+          </div>
+
+          <!-- Card 4: Offline and Privacy - compact -->
+          <div class="bento-card">
+            <div class="bento-card-inner">
+              <div class="bento-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+              </div>
+              <h3 class="bento-title">Offline and private</h3>
+              <p class="bento-desc">No account required. All data lives on your device in a local SQLite database. Optional PIN lock and journal preview hiding for sensitive entries.</p>
+            </div>
+          </div>
+
+          <!-- Card 5: Themes - wide bottom -->
+          <div class="bento-card bento-wide">
+            <div class="bento-card-inner">
+              <div class="bento-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+              </div>
+              <h3 class="bento-title">Dark and light themes</h3>
+              <p class="bento-desc">Switch instantly between a deep OLED dark canvas and a crisp paper-white light theme. All components adapt consistently.</p>
+              <div class="bento-visual bento-theme-visual">
+                <div class="theme-swatch-row">
+                  <div class="theme-swatch" style="background: #0C0E12;" title="#0C0E12"></div>
+                  <div class="theme-swatch" style="background: #14181F;" title="#14181F"></div>
+                  <div class="theme-swatch" style="background: #1B212B;" title="#1B212B"></div>
+                  <div class="theme-swatch" style="background: #262E3B;" title="#262E3B"></div>
+                  <div class="theme-swatch" style="background: #10B981;" title="#10B981"></div>
+                </div>
+                <div class="theme-swatch-row">
+                  <div class="theme-swatch" style="background: #F8FAFC;" title="#F8FAFC"></div>
+                  <div class="theme-swatch" style="background: #FFFFFF; border: 1px solid #E2E8F0;" title="#FFFFFF"></div>
+                  <div class="theme-swatch" style="background: #F1F5F9;" title="#F1F5F9"></div>
+                  <div class="theme-swatch" style="background: #E2E8F0;" title="#E2E8F0"></div>
+                  <div class="theme-swatch" style="background: #059669;" title="#059669"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 6: Backup -->
+          <div class="bento-card">
+            <div class="bento-card-inner">
+              <div class="bento-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              </div>
+              <h3 class="bento-title">Backup and restore</h3>
+              <p class="bento-desc">Export your entire journal database to a JSON file. Restore anytime on any device running the app.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Architecture -->
+    <section class="section section-alt" id="architecture">
+      <div class="container">
+        <div class="section-header">
+          <p class="section-label">under the surface</p>
+          <h2 class="section-title">Clean architecture,<br>modular features.</h2>
+        </div>
+
+        <div class="arch-layout">
+          <div class="arch-text">
+            <p class="arch-desc">DAYMARK separates data, domain, and presentation layers across each feature module. Business logic never touches the UI directly. The database, the summary engine, and the export pipeline are each isolated behind abstract contracts.</p>
+            <div class="arch-points">
+              <div class="arch-point">
+                <span class="arch-point-marker"></span>
+                <div>
+                  <span class="arch-point-title">Feature-driven modules</span>
+                  <span class="arch-point-desc">Journal, Contribution, Summary, Settings, Dashboard, and Navigation are self-contained feature directories.</span>
+                </div>
+              </div>
+              <div class="arch-point">
+                <span class="arch-point-marker"></span>
+                <div>
+                  <span class="arch-point-title">Pluggable summary engine</span>
+                  <span class="arch-point-desc">An abstract contract lets you swap between Google Gemini and the local heuristic engine without changing any screen code.</span>
+                </div>
+              </div>
+              <div class="arch-point">
+                <span class="arch-point-marker"></span>
+                <div>
+                  <span class="arch-point-title">Riverpod state management</span>
+                  <span class="arch-point-desc">Reactive providers manage journal lists, streak calculations, settings, and async data loading with automatic disposal.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="arch-tree">
+            <pre class="arch-code"><code>lib/
+  core/
+    constants/     <span class="code-comment">colors, theme, typography</span>
+    database/      <span class="code-comment">sqlite helper, migrations</span>
+    services/
+      ai/          <span class="code-comment">gemini + local engine</span>
+      backup/      <span class="code-comment">json export and import</span>
+      pdf/         <span class="code-comment">document generation</span>
+    utils/         <span class="code-comment">dates, streak calculator</span>
+  features/
+    journal/
+      data/        <span class="code-comment">datasources, models, repos</span>
+      domain/      <span class="code-comment">entities, repository contracts</span>
+      presentation/<span class="code-comment">screens, widgets, providers</span>
+    contribution/  <span class="code-comment">heatmap, streak badge</span>
+    dashboard/     <span class="code-comment">home screen</span>
+    summary/       <span class="code-comment">date range, pdf export</span>
+    settings/      <span class="code-comment">preferences, pin, profile</span></code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tech Stack -->
+    <section class="section" id="stack">
+      <div class="container">
+        <div class="section-header">
+          <p class="section-label">dependencies</p>
+          <h2 class="section-title">What it runs on.</h2>
+        </div>
+
+        <div class="stack-grid">
+          <div class="stack-card">
+            <span class="stack-name">Flutter</span>
+            <span class="stack-role">framework</span>
+            <span class="stack-version">3.47+</span>
+          </div>
+          <div class="stack-card">
+            <span class="stack-name">Riverpod</span>
+            <span class="stack-role">state management</span>
+            <span class="stack-version">2.6+</span>
+          </div>
+          <div class="stack-card">
+            <span class="stack-name">sqflite</span>
+            <span class="stack-role">local database</span>
+            <span class="stack-version">2.4+</span>
+          </div>
+          <div class="stack-card">
+            <span class="stack-name">Gemini API</span>
+            <span class="stack-role">summary engine</span>
+            <span class="stack-version">0.4+</span>
+          </div>
+          <div class="stack-card">
+            <span class="stack-name">pdf + printing</span>
+            <span class="stack-role">document export</span>
+            <span class="stack-version">3.11+</span>
+          </div>
+          <div class="stack-card">
+            <span class="stack-name">Inter + JetBrains Mono</span>
+            <span class="stack-role">typography</span>
+            <span class="stack-version">variable</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Get Started -->
+    <section class="section section-cta">
+      <div class="container">
+        <div class="cta-block">
+          <p class="section-label">get started</p>
+          <h2 class="section-title">Clone. Build. Write.</h2>
+          <div class="cta-terminal">
+            <div class="terminal-bar">
+              <span class="terminal-dot"></span>
+              <span class="terminal-dot"></span>
+              <span class="terminal-dot"></span>
+            </div>
+            <div class="terminal-body">
+              <code><span class="term-prompt">$</span> git clone https://github.com/arundaya24/DayMark.git</code>
+              <code><span class="term-prompt">$</span> cd DayMark</code>
+              <code><span class="term-prompt">$</span> flutter pub get</code>
+              <code><span class="term-prompt">$</span> flutter run</code>
+            </div>
+          </div>
+          <a href="https://github.com/arundaya24/DayMark" class="btn btn-primary shimmer-wrap" target="_blank" rel="noopener">
+            <span class="shimmer-layer"></span>
+            View Repository
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M5 3h8v8M13 3L3 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-left">
+          <span class="footer-wordmark">DAYMARK</span>
+          <span class="footer-copy">Built with Flutter. MIT License.</span>
+        </div>
+        <div class="footer-links">
+          <a href="https://github.com/arundaya24/DayMark" class="footer-link" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://github.com/arundaya24/DayMark/issues" class="footer-link" target="_blank" rel="noopener">Issues</a>
+          <a href="https://github.com/arundaya24" class="footer-link" target="_blank" rel="noopener">arundaya24</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>
