@@ -25,6 +25,8 @@ class SearchFilterBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
+    final typo = context.typo;
     final hasDateFilter = startDate != null || endDate != null;
 
     return Column(
@@ -37,20 +39,22 @@ class SearchFilterBar extends StatelessWidget {
               child: Container(
                 height: 46,
                 decoration: BoxDecoration(
-                  color: AppColors.surface,
+                  color: colors.surface,
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: AppColors.border),
+                  border: Border.all(color: colors.border),
                 ),
                 child: TextField(
                   onChanged: onSearchChanged,
-                  style: AppTypography.bodyMedium.copyWith(color: AppColors.textPrimary),
-                  decoration: const InputDecoration(
+                  style: typo.bodyMedium.copyWith(color: colors.textPrimary),
+                  decoration: InputDecoration(
                     hintText: 'Search journals, tags, lessons...',
-                    prefixIcon: Icon(Icons.search, color: AppColors.textMuted, size: 20),
+                    prefixIcon: Icon(Icons.search, color: colors.textMuted, size: 20),
                     border: InputBorder.none,
                     enabledBorder: InputBorder.none,
                     focusedBorder: InputBorder.none,
-                    contentPadding: EdgeInsets.symmetric(vertical: 12),
+                    contentPadding: const EdgeInsets.symmetric(vertical: 12),
+                    hintStyle: typo.bodyMedium.copyWith(color: colors.textMuted),
+                    fillColor: Colors.transparent,
                   ),
                 ),
               ),
@@ -63,17 +67,17 @@ class SearchFilterBar extends StatelessWidget {
                 height: 46,
                 padding: const EdgeInsets.symmetric(horizontal: 14),
                 decoration: BoxDecoration(
-                  color: hasDateFilter ? AppColors.primary.withValues(alpha: 0.15) : AppColors.surface,
+                  color: hasDateFilter ? AppColors.primary.withValues(alpha: 0.15) : colors.surface,
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color: hasDateFilter ? AppColors.primary : AppColors.border,
+                    color: hasDateFilter ? AppColors.primary : colors.border,
                   ),
                 ),
                 child: Row(
                   children: [
                     Icon(
                       Icons.date_range_rounded,
-                      color: hasDateFilter ? AppColors.primary : AppColors.textSecondary,
+                      color: hasDateFilter ? AppColors.primary : colors.textSecondary,
                       size: 20,
                     ),
                     if (hasDateFilter) ...[
@@ -97,9 +101,9 @@ class SearchFilterBar extends StatelessWidget {
           scrollDirection: Axis.horizontal,
           child: Row(
             children: [
-              _buildCategoryPill('All', selectedCategory == 'All'),
+              _buildCategoryPill(context, 'All', selectedCategory == 'All'),
               ...AppCategories.all.map((c) {
-                return _buildCategoryPill(c.id, selectedCategory == c.id, label: c.name);
+                return _buildCategoryPill(context, c.id, selectedCategory == c.id, label: c.name);
               }),
             ],
           ),
@@ -108,7 +112,10 @@ class SearchFilterBar extends StatelessWidget {
     );
   }
 
-  Widget _buildCategoryPill(String id, bool isSelected, {String? label}) {
+  Widget _buildCategoryPill(BuildContext context, String id, bool isSelected, {String? label}) {
+    final colors = context.colors;
+    final typo = context.typo;
+
     return Padding(
       padding: const EdgeInsets.only(right: 8),
       child: GestureDetector(
@@ -116,16 +123,16 @@ class SearchFilterBar extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
           decoration: BoxDecoration(
-            color: isSelected ? AppColors.primary : AppColors.surfaceElevated,
+            color: isSelected ? AppColors.primary : colors.surfaceElevated,
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
-              color: isSelected ? AppColors.primary : AppColors.border,
+              color: isSelected ? AppColors.primary : colors.border,
             ),
           ),
           child: Text(
             label ?? id,
-            style: AppTypography.labelMedium.copyWith(
-              color: isSelected ? Colors.black : AppColors.textSecondary,
+            style: typo.labelMedium.copyWith(
+              color: isSelected ? Colors.black : colors.textSecondary,
               fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
             ),
           ),
@@ -143,17 +150,6 @@ class SearchFilterBar extends StatelessWidget {
       initialDateRange: startDate != null && endDate != null
           ? DateTimeRange(start: startDate!, end: endDate!)
           : DateTimeRange(start: now.subtract(const Duration(days: 7)), end: now),
-      builder: (ctx, child) {
-        return Theme(
-          data: ThemeData.dark().copyWith(
-            colorScheme: const ColorScheme.dark(
-              primary: AppColors.primary,
-              surface: AppColors.surfaceElevated,
-            ),
-          ),
-          child: child!,
-        );
-      },
     );
 
     if (picked != null) {

@@ -39,20 +39,23 @@ class _JournalDetailScreenState extends ConsumerState<JournalDetailScreen> {
   }
 
   void _confirmDelete() {
+    final colors = context.colors;
+    final typo = context.typo;
+
     showDialog(
       context: context,
       builder: (ctx) {
         return AlertDialog(
-          backgroundColor: AppColors.surfaceElevated,
-          title: Text('Delete Journal?', style: AppTypography.headlineMedium),
+          backgroundColor: colors.surface,
+          title: Text('Delete Journal?', style: typo.headlineMedium),
           content: Text(
             'Are you sure you want to delete "${_currentEntry.title}"? This action cannot be undone and will update your activity count.',
-            style: AppTypography.bodyMedium,
+            style: typo.bodyMedium,
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(ctx),
-              child: Text('Cancel', style: AppTypography.labelMedium),
+              child: Text('Cancel', style: typo.labelMedium),
             ),
             ElevatedButton(
               onPressed: () async {
@@ -77,12 +80,14 @@ class _JournalDetailScreenState extends ConsumerState<JournalDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
+    final typo = context.typo;
     final category = AppCategories.getById(_currentEntry.category);
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: colors.background,
       appBar: AppBar(
-        title: Text('Journal Entry', style: AppTypography.titleLarge),
+        title: Text('Journal Entry', style: typo.titleLarge),
         actions: [
           IconButton(
             icon: const Icon(Icons.edit_outlined, color: AppColors.primary),
@@ -119,7 +124,7 @@ class _JournalDetailScreenState extends ConsumerState<JournalDetailScreen> {
                         const SizedBox(width: 6),
                         Text(
                           category.name,
-                          style: AppTypography.monoLabel.copyWith(
+                          style: typo.monoLabel.copyWith(
                             color: category.color,
                             fontWeight: FontWeight.w700,
                           ),
@@ -132,12 +137,12 @@ class _JournalDetailScreenState extends ConsumerState<JournalDetailScreen> {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                       decoration: BoxDecoration(
-                        color: AppColors.surfaceHighlight,
+                        color: colors.surfaceHighlight,
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
                         _currentEntry.mood!,
-                        style: AppTypography.monoLabel.copyWith(color: AppColors.textPrimary),
+                        style: typo.monoLabel.copyWith(color: colors.textPrimary),
                       ),
                     ),
                   ],
@@ -151,25 +156,25 @@ class _JournalDetailScreenState extends ConsumerState<JournalDetailScreen> {
               // Title
               Text(
                 _currentEntry.title,
-                style: AppTypography.displayLarge.copyWith(fontSize: 26),
+                style: typo.displayLarge.copyWith(fontSize: 26),
               ),
               const SizedBox(height: 12),
 
               // Date & Time
               Row(
                 children: [
-                  const Icon(Icons.calendar_today_rounded, size: 14, color: AppColors.textMuted),
+                  Icon(Icons.calendar_today_rounded, size: 14, color: colors.textMuted),
                   const SizedBox(width: 6),
                   Text(
                     AppDateUtils.formatDisplay(_currentEntry.createdAt, 'EEEE, dd MMMM yyyy'),
-                    style: AppTypography.monoLabel,
+                    style: typo.monoLabel,
                   ),
                   const SizedBox(width: 12),
-                  const Icon(Icons.access_time_rounded, size: 14, color: AppColors.textMuted),
+                  Icon(Icons.access_time_rounded, size: 14, color: colors.textMuted),
                   const SizedBox(width: 6),
                   Text(
                     AppDateUtils.formatDisplay(_currentEntry.createdAt, 'HH:mm'),
-                    style: AppTypography.monoLabel,
+                    style: typo.monoLabel,
                   ),
                 ],
               ),
@@ -184,13 +189,13 @@ class _JournalDetailScreenState extends ConsumerState<JournalDetailScreen> {
                     return Container(
                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                       decoration: BoxDecoration(
-                        color: AppColors.surfaceElevated,
+                        color: colors.surfaceElevated,
                         borderRadius: BorderRadius.circular(6),
-                        border: Border.all(color: AppColors.border),
+                        border: Border.all(color: colors.border),
                       ),
                       child: Text(
                         '#$t',
-                        style: AppTypography.monoLabel.copyWith(color: AppColors.primaryLight),
+                        style: typo.monoLabel.copyWith(color: AppColors.primary),
                       ),
                     );
                   }).toList(),
@@ -198,13 +203,13 @@ class _JournalDetailScreenState extends ConsumerState<JournalDetailScreen> {
                 const SizedBox(height: 20),
               ],
 
-              const Divider(color: AppColors.borderSubtle),
+              Divider(color: colors.borderSubtle),
               const SizedBox(height: 20),
 
               // Content
               SelectableText(
                 _currentEntry.content.isEmpty ? '(No written reflection recorded.)' : _currentEntry.content,
-                style: AppTypography.bodyLarge.copyWith(height: 1.8),
+                style: typo.bodyLarge.copyWith(height: 1.8),
               ),
 
               const SizedBox(height: 40),

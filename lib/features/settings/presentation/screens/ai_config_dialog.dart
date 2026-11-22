@@ -39,20 +39,23 @@ class _AiConfigDialogState extends State<AiConfigDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
+    final typo = context.typo;
+
     return AlertDialog(
-      backgroundColor: AppColors.surfaceElevated,
-      title: Text('AI Provider Settings', style: AppTypography.headlineMedium),
+      backgroundColor: colors.surface,
+      title: Text('AI Provider Settings', style: typo.headlineMedium),
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'DAYMARK supports both local zero-hallucination offline heuristic AI and cloud Google Gemini API.',
-              style: AppTypography.bodySmall,
+              'DAYMARK supports both local offline heuristic AI and cloud Google Gemini API.',
+              style: typo.bodySmall,
             ),
             const SizedBox(height: 16),
-            Text('SUMMARY PROVIDER', style: AppTypography.monoLabel),
+            Text('SUMMARY PROVIDER', style: typo.monoLabel),
             const SizedBox(height: 8),
             GestureDetector(
               onTap: () => setState(() => _provider = 'local'),
@@ -60,17 +63,17 @@ class _AiConfigDialogState extends State<AiConfigDialog> {
                 padding: const EdgeInsets.all(12),
                 margin: const EdgeInsets.only(bottom: 8),
                 decoration: BoxDecoration(
-                  color: _provider == 'local' ? AppColors.primary.withValues(alpha: 0.12) : AppColors.surface,
+                  color: _provider == 'local' ? AppColors.primary.withValues(alpha: 0.12) : colors.surfaceElevated,
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    color: _provider == 'local' ? AppColors.primary : AppColors.border,
+                    color: _provider == 'local' ? AppColors.primary : colors.border,
                   ),
                 ),
                 child: Row(
                   children: [
                     Icon(
                       _provider == 'local' ? Icons.radio_button_checked : Icons.radio_button_off,
-                      color: _provider == 'local' ? AppColors.primary : AppColors.textMuted,
+                      color: _provider == 'local' ? AppColors.primary : colors.textMuted,
                       size: 20,
                     ),
                     const SizedBox(width: 10),
@@ -78,8 +81,8 @@ class _AiConfigDialogState extends State<AiConfigDialog> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Local Heuristic Engine', style: AppTypography.titleMedium),
-                          Text('100% offline, privacy guaranteed, zero hallucination', style: AppTypography.bodySmall),
+                          Text('Local Heuristic Engine', style: typo.titleMedium),
+                          Text('100% offline, privacy guaranteed', style: typo.bodySmall),
                         ],
                       ),
                     ),
@@ -92,17 +95,17 @@ class _AiConfigDialogState extends State<AiConfigDialog> {
               child: Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: _provider == 'gemini' ? AppColors.primary.withValues(alpha: 0.12) : AppColors.surface,
+                  color: _provider == 'gemini' ? AppColors.primary.withValues(alpha: 0.12) : colors.surfaceElevated,
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    color: _provider == 'gemini' ? AppColors.primary : AppColors.border,
+                    color: _provider == 'gemini' ? AppColors.primary : colors.border,
                   ),
                 ),
                 child: Row(
                   children: [
                     Icon(
                       _provider == 'gemini' ? Icons.radio_button_checked : Icons.radio_button_off,
-                      color: _provider == 'gemini' ? AppColors.primary : AppColors.textMuted,
+                      color: _provider == 'gemini' ? AppColors.primary : colors.textMuted,
                       size: 20,
                     ),
                     const SizedBox(width: 10),
@@ -110,8 +113,8 @@ class _AiConfigDialogState extends State<AiConfigDialog> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Google Gemini API', style: AppTypography.titleMedium),
-                          Text('Contextual LLM intelligence via REST API', style: AppTypography.bodySmall),
+                          Text('Google Gemini API', style: typo.titleMedium),
+                          Text('Contextual LLM intelligence via REST API', style: typo.bodySmall),
                         ],
                       ),
                     ),
@@ -121,19 +124,24 @@ class _AiConfigDialogState extends State<AiConfigDialog> {
             ),
             if (_provider == 'gemini') ...[
               const SizedBox(height: 14),
-              Text('GEMINI API KEY', style: AppTypography.monoLabel),
+              Text('GEMINI API KEY', style: typo.monoLabel),
               const SizedBox(height: 6),
               TextField(
                 controller: _apiKeyController,
                 obscureText: true,
-                decoration: const InputDecoration(hintText: 'Enter AI Studio Gemini API Key'),
+                style: typo.bodyMedium.copyWith(color: colors.textPrimary),
+                decoration: InputDecoration(
+                  hintText: 'Enter AI Studio Gemini API Key',
+                  hintStyle: typo.bodyMedium.copyWith(color: colors.textMuted),
+                ),
               ),
               const SizedBox(height: 12),
-              Text('MODEL', style: AppTypography.monoLabel),
+              Text('MODEL', style: typo.monoLabel),
               const SizedBox(height: 6),
               DropdownButtonFormField<String>(
                 initialValue: _model,
-                dropdownColor: AppColors.surfaceElevated,
+                dropdownColor: colors.surfaceElevated,
+                style: typo.bodyMedium.copyWith(color: colors.textPrimary),
                 items: const [
                   DropdownMenuItem(value: 'gemini-1.5-flash', child: Text('Gemini 1.5 Flash (Fast)')),
                   DropdownMenuItem(value: 'gemini-1.5-pro', child: Text('Gemini 1.5 Pro (Deep)')),
@@ -151,7 +159,7 @@ class _AiConfigDialogState extends State<AiConfigDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: Text('Cancel', style: AppTypography.labelMedium),
+          child: Text('Cancel', style: typo.labelMedium),
         ),
         ElevatedButton(
           onPressed: () {

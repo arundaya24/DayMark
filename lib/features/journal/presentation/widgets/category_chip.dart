@@ -17,16 +17,19 @@ class CategoryChipWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
+    final typo = context.typo;
+
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? category.color.withValues(alpha: 0.18) : AppColors.surfaceElevated,
+          color: isSelected ? category.color.withValues(alpha: 0.18) : colors.surfaceElevated,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: isSelected ? category.color : AppColors.border,
+            color: isSelected ? category.color : colors.border,
             width: isSelected ? 1.5 : 1,
           ),
         ),
@@ -36,13 +39,13 @@ class CategoryChipWidget extends StatelessWidget {
             Icon(
               category.icon,
               size: 16,
-              color: isSelected ? category.color : AppColors.textMuted,
+              color: isSelected ? category.color : colors.textMuted,
             ),
             const SizedBox(width: 6),
             Text(
               category.name,
-              style: AppTypography.labelMedium.copyWith(
-                color: isSelected ? category.color : AppColors.textSecondary,
+              style: typo.labelMedium.copyWith(
+                color: isSelected ? category.color : colors.textSecondary,
                 fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
               ),
             ),

@@ -133,18 +133,20 @@ class _JournalEditorScreenState extends ConsumerState<JournalEditorScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
+    final typo = context.typo;
     final isEditing = widget.initialEntry != null;
     final displayDate = widget.initialEntry?.createdAt ?? DateTime.now();
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: colors.background,
       appBar: AppBar(
-        title: Text(isEditing ? 'Edit Entry' : 'New Mark'),
+        title: Text(isEditing ? 'Edit Entry' : 'New Mark', style: typo.titleLarge),
         actions: [
           IconButton(
             icon: Icon(
               _isPinned ? Icons.push_pin_rounded : Icons.push_pin_outlined,
-              color: _isPinned ? AppColors.primary : AppColors.textMuted,
+              color: _isPinned ? AppColors.primary : colors.textMuted,
             ),
             tooltip: 'Pin Entry',
             onPressed: () => setState(() => _isPinned = !_isPinned),
@@ -181,11 +183,11 @@ class _JournalEditorScreenState extends ConsumerState<JournalEditorScreen> {
               // Timestamp Info Bar
               Row(
                 children: [
-                  const Icon(Icons.access_time_rounded, size: 14, color: AppColors.textMuted),
+                  Icon(Icons.access_time_rounded, size: 14, color: colors.textMuted),
                   const SizedBox(width: 6),
                   Text(
                     AppDateUtils.formatDateTimeDisplay(displayDate),
-                    style: AppTypography.monoLabel,
+                    style: typo.monoLabel,
                   ),
                 ],
               ),
@@ -195,24 +197,25 @@ class _JournalEditorScreenState extends ConsumerState<JournalEditorScreen> {
               TextField(
                 controller: _titleController,
                 autofocus: !isEditing,
-                style: AppTypography.displayMedium.copyWith(fontSize: 22),
-                decoration: const InputDecoration(
+                style: typo.displayMedium.copyWith(fontSize: 22),
+                decoration: InputDecoration(
                   hintText: 'What happened today?',
                   border: InputBorder.none,
                   enabledBorder: InputBorder.none,
                   focusedBorder: InputBorder.none,
                   contentPadding: EdgeInsets.zero,
                   filled: false,
+                  hintStyle: typo.displayMedium.copyWith(fontSize: 22, color: colors.textMuted),
                 ),
                 maxLines: null,
               ),
 
               const SizedBox(height: 16),
-              const Divider(color: AppColors.borderSubtle),
+              Divider(color: colors.borderSubtle),
               const SizedBox(height: 16),
 
               // Category Selector
-              Text('CATEGORY', style: AppTypography.monoLabel),
+              Text('CATEGORY', style: typo.monoLabel),
               const SizedBox(height: 8),
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
@@ -226,15 +229,15 @@ class _JournalEditorScreenState extends ConsumerState<JournalEditorScreen> {
                         avatar: Icon(c.icon, size: 14, color: isSel ? Colors.black : c.color),
                         selected: isSel,
                         selectedColor: c.color,
-                        backgroundColor: AppColors.surfaceElevated,
-                        labelStyle: AppTypography.labelMedium.copyWith(
-                          color: isSel ? Colors.black : AppColors.textSecondary,
+                        backgroundColor: colors.surfaceElevated,
+                        labelStyle: typo.labelMedium.copyWith(
+                          color: isSel ? Colors.black : colors.textSecondary,
                           fontWeight: isSel ? FontWeight.w700 : FontWeight.w500,
                         ),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                           side: BorderSide(
-                            color: isSel ? c.color : AppColors.border,
+                            color: isSel ? c.color : colors.border,
                           ),
                         ),
                         onSelected: (selected) {
@@ -251,7 +254,7 @@ class _JournalEditorScreenState extends ConsumerState<JournalEditorScreen> {
               const SizedBox(height: 16),
 
               // Mood Selector
-              Text('MINDSET / MOOD', style: AppTypography.monoLabel),
+              Text('MINDSET / MOOD', style: typo.monoLabel),
               const SizedBox(height: 8),
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
@@ -264,14 +267,14 @@ class _JournalEditorScreenState extends ConsumerState<JournalEditorScreen> {
                         label: Text(mood),
                         selected: isSel,
                         selectedColor: AppColors.primary.withValues(alpha: 0.2),
-                        backgroundColor: AppColors.surfaceElevated,
-                        labelStyle: AppTypography.labelMedium.copyWith(
-                          color: isSel ? AppColors.primary : AppColors.textSecondary,
+                        backgroundColor: colors.surfaceElevated,
+                        labelStyle: typo.labelMedium.copyWith(
+                          color: isSel ? AppColors.primary : colors.textSecondary,
                         ),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                           side: BorderSide(
-                            color: isSel ? AppColors.primary : AppColors.border,
+                            color: isSel ? AppColors.primary : colors.border,
                           ),
                         ),
                         onSelected: (selected) {
@@ -288,7 +291,7 @@ class _JournalEditorScreenState extends ConsumerState<JournalEditorScreen> {
               const SizedBox(height: 16),
 
               // Tags
-              Text('TAGS', style: AppTypography.monoLabel),
+              Text('TAGS', style: typo.monoLabel),
               const SizedBox(height: 8),
               Wrap(
                 spacing: 8,
@@ -299,11 +302,11 @@ class _JournalEditorScreenState extends ConsumerState<JournalEditorScreen> {
                       label: Text('#$tag'),
                       deleteIcon: const Icon(Icons.close, size: 14),
                       onDeleted: () => _removeTag(tag),
-                      backgroundColor: AppColors.surfaceHighlight,
-                      labelStyle: AppTypography.monoLabel.copyWith(color: AppColors.textPrimary),
+                      backgroundColor: colors.surfaceHighlight,
+                      labelStyle: typo.monoLabel.copyWith(color: colors.textPrimary),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
-                        side: const BorderSide(color: AppColors.border),
+                        side: BorderSide(color: colors.border),
                       ),
                     );
                   }),
@@ -312,16 +315,20 @@ class _JournalEditorScreenState extends ConsumerState<JournalEditorScreen> {
                     height: 36,
                     child: TextField(
                       controller: _tagInputController,
-                      style: AppTypography.bodySmall,
+                      style: typo.bodySmall,
                       onSubmitted: _addTag,
                       decoration: InputDecoration(
                         hintText: '+ Add tag...',
                         contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                         filled: true,
-                        fillColor: AppColors.surfaceElevated,
+                        fillColor: colors.surfaceElevated,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
-                          borderSide: const BorderSide(color: AppColors.border),
+                          borderSide: BorderSide(color: colors.border),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: colors.border),
                         ),
                       ),
                     ),
@@ -330,24 +337,25 @@ class _JournalEditorScreenState extends ConsumerState<JournalEditorScreen> {
               ),
 
               const SizedBox(height: 20),
-              const Divider(color: AppColors.borderSubtle),
+              Divider(color: colors.borderSubtle),
               const SizedBox(height: 16),
 
               // Content Body
-              Text('REFLECTION & DETAILS', style: AppTypography.monoLabel),
+              Text('REFLECTION & DETAILS', style: typo.monoLabel),
               const SizedBox(height: 8),
               TextField(
                 controller: _contentController,
                 maxLines: null,
                 minLines: 12,
-                style: AppTypography.bodyLarge.copyWith(height: 1.7),
-                decoration: const InputDecoration(
+                style: typo.bodyLarge.copyWith(height: 1.7),
+                decoration: InputDecoration(
                   hintText: 'Describe your journey, key learnings, milestones, challenges, or thoughts...',
                   border: InputBorder.none,
                   enabledBorder: InputBorder.none,
                   focusedBorder: InputBorder.none,
                   filled: false,
                   contentPadding: EdgeInsets.zero,
+                  hintStyle: typo.bodyLarge.copyWith(height: 1.7, color: colors.textMuted),
                 ),
               ),
               const SizedBox(height: 40),

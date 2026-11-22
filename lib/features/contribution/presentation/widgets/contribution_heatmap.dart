@@ -3,8 +3,9 @@ import 'package:daymark/core/constants/app_typography.dart';
 import 'package:daymark/core/utils/date_utils.dart';
 import 'package:daymark/features/journal/domain/repositories/journal_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
-class ContributionHeatmap extends StatelessWidget {
+class ContributionHeatmap extends StatefulWidget {
   final Map<String, int> contributionMap;
   final JournalRepository repository;
   final int weeksToShow;
@@ -16,26 +17,36 @@ class ContributionHeatmap extends StatelessWidget {
     this.weeksToShow = 18,
   });
 
-  Color _getCellColor(int count) {
-    if (count <= 0) return AppColors.heatLevel0;
-    if (count == 1) return AppColors.heatLevel1;
-    if (count <= 3) return AppColors.heatLevel2;
-    if (count <= 5) return AppColors.heatLevel3;
-    return AppColors.heatLevel4;
+  @override
+  State<ContributionHeatmap> createState() => _ContributionHeatmapState();
+}
+
+class _ContributionHeatmapState extends State<ContributionHeatmap> {
+  DateTime? _selectedDate;
+
+  Color _getCellColor(int count, AppThemeColors colors) {
+    if (count <= 0) return colors.heatLevel0;
+    if (count == 1) return colors.heatLevel1;
+    if (count <= 3) return colors.heatLevel2;
+    if (count <= 5) return colors.heatLevel3;
+    return colors.heatLevel4;
   }
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
+    final typo = context.typo;
     final today = AppDateUtils.toLocalDateOnly(DateTime.now());
-    
-    final currentWeekday = today.weekday;
-    final totalDays = (weeksToShow - 1) * 7 + currentWeekday;
+
+    final currentWeekday = today.weekday; // 1 = Monday, 7 = Sunday
+    final totalDays = (widget.weeksToShow - 1) * 7 + currentWeekday;
     final startDate = today.subtract(Duration(days: totalDays - 1));
 
+    // Build week columns
     final List<List<DateTime>> weeks = [];
     DateTime cursor = startDate;
 
-    for (int w = 0; w < weeksToShow; w++) {
+    for (int w = 0; w < widget.weeksToShow; w++) {
       final List<DateTime> weekDays = [];
       for (int d = 0; d < 7; d++) {
         if (!cursor.isAfter(today)) {
@@ -48,91 +59,145 @@ class ContributionHeatmap extends StatelessWidget {
       }
     }
 
+    // Determine month labels for columns
+    final Map<int, String> monthLabels = {};
+    int? lastMonth;
+    for (int i = 0; i < weeks.length; i++) {
+      final firstDayOfWeek = weeks[i].first;
+      if (lastMonth == null || firstDayOfWeek.month != lastMonth) {
+        monthLabels[i] = DateFormat('MMM').format(firstDayOfWeek);
+        lastMonth = firstDayOfWeek.month;
+      }
+    }
+
+    // Active selection info
+    final selectedDay = _selectedDate ?? today;
+    final selectedKey = AppDateUtils.formatDateKey(selectedDay);
+    final selectedCount = widget.contributionMap[selectedKey] ?? 0;
+
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.border, width: 1),
+        border: Border.all(color: colors.border, width: 1),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Header: Title & Selected Day Summary
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  Container(
-                    width: 8,
-                    height: 8,
-                    decoration: const BoxDecoration(
-                      color: AppColors.primary,
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Text('Activity Heatmap', style: AppTypography.titleLarge),
-                ],
-              ),
               Text(
-                'GitHub Style',
-                style: AppTypography.monoLabel.copyWith(color: AppColors.textMuted),
+                'Activity Calendar',
+                style: typo.titleLarge.copyWith(fontWeight: FontWeight.w700),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(
+                  color: selectedCount > 0
+                      ? AppColors.primary.withValues(alpha: 0.12)
+                      : colors.surfaceHighlight,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Text(
+                  '${DateFormat('d MMM').format(selectedDay)}: $selectedCount mark${selectedCount == 1 ? '' : 's'}',
+                  style: typo.monoLabel.copyWith(
+                    color: selectedCount > 0 ? AppColors.primary : colors.textMuted,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
               ),
             ],
           ),
           const SizedBox(height: 16),
 
-          // Scrollable Heatmap Grid
+          // Scrollable Grid (Right-aligned by default to show current date)
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             reverse: true,
+            physics: const BouncingScrollPhysics(),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // Weekday Labels on the Left
                 Padding(
-                  padding: const EdgeInsets.only(right: 6, top: 2),
+                  padding: const EdgeInsets.only(right: 8, top: 22),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Mon', style: AppTypography.monoLabel.copyWith(fontSize: 9)),
-                      const SizedBox(height: 14),
-                      Text('Wed', style: AppTypography.monoLabel.copyWith(fontSize: 9)),
-                      const SizedBox(height: 14),
-                      Text('Fri', style: AppTypography.monoLabel.copyWith(fontSize: 9)),
-                      const SizedBox(height: 6),
+                      _buildWeekdayLabel('Mon', typo),
+                      const SizedBox(height: 19),
+                      _buildWeekdayLabel('Wed', typo),
+                      const SizedBox(height: 19),
+                      _buildWeekdayLabel('Fri', typo),
                     ],
                   ),
                 ),
 
-                ...weeks.map((week) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 2.5),
-                    child: Column(
-                      children: week.map((day) {
-                        final dateKey = AppDateUtils.formatDateKey(day);
-                        final count = contributionMap[dateKey] ?? 0;
-                        final color = _getCellColor(count);
+                // Week Columns
+                ...weeks.asMap().entries.map((entry) {
+                  final weekIndex = entry.key;
+                  final week = entry.value;
+                  final monthLabel = monthLabels[weekIndex];
 
-                        return GestureDetector(
-                          onTap: () => _showDayDetails(context, day, count),
-                          child: Container(
-                            margin: const EdgeInsets.symmetric(vertical: 2.5),
-                            width: 14,
-                            height: 14,
-                            decoration: BoxDecoration(
-                              color: color,
-                              borderRadius: BorderRadius.circular(3),
-                              border: Border.all(
-                                color: AppDateUtils.isSameDay(day, today)
-                                    ? AppColors.primaryLight.withValues(alpha: 0.8)
-                                    : Colors.transparent,
-                                width: 1,
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 2),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Month Header Label
+                        SizedBox(
+                          height: 18,
+                          child: monthLabel != null
+                              ? Text(
+                                  monthLabel,
+                                  style: typo.monoLabel.copyWith(
+                                    fontSize: 10,
+                                    color: colors.textMuted,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                )
+                              : const SizedBox.shrink(),
+                        ),
+                        const SizedBox(height: 4),
+
+                        // 7 Days in Week
+                        ...week.map((day) {
+                          final dateKey = AppDateUtils.formatDateKey(day);
+                          final count = widget.contributionMap[dateKey] ?? 0;
+                          final cellColor = _getCellColor(count, colors);
+                          final isToday = AppDateUtils.isSameDay(day, today);
+                          final isSelected = _selectedDate != null &&
+                              AppDateUtils.isSameDay(day, _selectedDate!);
+
+                          return GestureDetector(
+                            onTap: () {
+                              setState(() => _selectedDate = day);
+                              if (count > 0) {
+                                _showDayDetails(context, day, count);
+                              }
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.symmetric(vertical: 2),
+                              width: 14,
+                              height: 14,
+                              decoration: BoxDecoration(
+                                color: cellColor,
+                                borderRadius: BorderRadius.circular(3),
+                                border: Border.all(
+                                  color: isSelected
+                                      ? AppColors.primary
+                                      : (isToday
+                                          ? AppColors.primaryLight.withValues(alpha: 0.8)
+                                          : Colors.transparent),
+                                  width: isSelected ? 1.5 : (isToday ? 1 : 0),
+                                ),
                               ),
                             ),
-                          ),
-                        );
-                      }).toList(),
+                          );
+                        }),
+                      ],
                     ),
                   );
                 }),
@@ -140,31 +205,31 @@ class ContributionHeatmap extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(height: 14),
+          const SizedBox(height: 16),
 
-          // Legend
+          // Footer: Active days count and Clean Legend
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '${contributionMap.length} active days logged',
-                style: AppTypography.bodySmall,
+                '${widget.contributionMap.length} active days recorded',
+                style: typo.bodySmall,
               ),
               Row(
                 children: [
-                  Text('Less', style: AppTypography.monoLabel.copyWith(fontSize: 10)),
+                  Text('Less', style: typo.monoLabel.copyWith(fontSize: 10)),
                   const SizedBox(width: 6),
-                  _buildLegendBox(AppColors.heatLevel0),
+                  _buildLegendBox(colors.heatLevel0, colors.border),
                   const SizedBox(width: 3),
-                  _buildLegendBox(AppColors.heatLevel1),
+                  _buildLegendBox(colors.heatLevel1),
                   const SizedBox(width: 3),
-                  _buildLegendBox(AppColors.heatLevel2),
+                  _buildLegendBox(colors.heatLevel2),
                   const SizedBox(width: 3),
-                  _buildLegendBox(AppColors.heatLevel3),
+                  _buildLegendBox(colors.heatLevel3),
                   const SizedBox(width: 3),
-                  _buildLegendBox(AppColors.heatLevel4),
+                  _buildLegendBox(colors.heatLevel4),
                   const SizedBox(width: 6),
-                  Text('More', style: AppTypography.monoLabel.copyWith(fontSize: 10)),
+                  Text('More', style: typo.monoLabel.copyWith(fontSize: 10)),
                 ],
               ),
             ],
@@ -174,24 +239,37 @@ class ContributionHeatmap extends StatelessWidget {
     );
   }
 
-  Widget _buildLegendBox(Color color) {
+  Widget _buildWeekdayLabel(String text, AppTypography typo) {
+    return SizedBox(
+      height: 14,
+      child: Text(
+        text,
+        style: typo.monoLabel.copyWith(fontSize: 9),
+      ),
+    );
+  }
+
+  Widget _buildLegendBox(Color color, [Color? borderColor]) {
     return Container(
-      width: 10,
-      height: 10,
+      width: 11,
+      height: 11,
       decoration: BoxDecoration(
         color: color,
-        borderRadius: BorderRadius.circular(2),
+        borderRadius: BorderRadius.circular(2.5),
+        border: borderColor != null ? Border.all(color: borderColor, width: 0.5) : null,
       ),
     );
   }
 
   void _showDayDetails(BuildContext context, DateTime day, int count) async {
-    final entries = await repository.getJournalsForDate(day);
+    final colors = context.colors;
+    final typo = context.typo;
+    final entries = await widget.repository.getJournalsForDate(day);
     if (!context.mounted) return;
 
     showModalBottomSheet(
       context: context,
-      backgroundColor: AppColors.surfaceElevated,
+      backgroundColor: colors.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -210,20 +288,20 @@ class ContributionHeatmap extends StatelessWidget {
                     children: [
                       Text(
                         AppDateUtils.formatDisplay(day, 'EEEE, dd MMMM yyyy'),
-                        style: AppTypography.titleLarge,
+                        style: typo.titleLarge,
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        '$count contribution${count == 1 ? '' : 's'} recorded',
-                        style: AppTypography.bodyMedium.copyWith(
-                          color: count > 0 ? AppColors.primary : AppColors.textMuted,
+                        '$count mark${count == 1 ? '' : 's'} recorded',
+                        style: typo.bodyMedium.copyWith(
+                          color: count > 0 ? AppColors.primary : colors.textMuted,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                     ],
                   ),
                   IconButton(
-                    icon: const Icon(Icons.close, color: AppColors.textMuted),
+                    icon: Icon(Icons.close, color: colors.textMuted),
                     onPressed: () => Navigator.pop(ctx),
                   ),
                 ],
@@ -234,8 +312,8 @@ class ContributionHeatmap extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 20),
                   child: Center(
                     child: Text(
-                      'No journals written on this day.',
-                      style: AppTypography.bodyMedium,
+                      'No written reflections on this day.',
+                      style: typo.bodyMedium,
                     ),
                   ),
                 )
@@ -244,7 +322,7 @@ class ContributionHeatmap extends StatelessWidget {
                   child: ListView.separated(
                     shrinkWrap: true,
                     itemCount: entries.length,
-                    separatorBuilder: (_, _) => const Divider(color: AppColors.borderSubtle),
+                    separatorBuilder: (_, __) => Divider(color: colors.borderSubtle),
                     itemBuilder: (ctx, index) {
                       final item = entries[index];
                       return ListTile(
@@ -252,21 +330,21 @@ class ContributionHeatmap extends StatelessWidget {
                         leading: Container(
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            color: AppColors.surfaceHighlight,
+                            color: colors.surfaceHighlight,
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          child: const Icon(Icons.edit_note, color: AppColors.primary, size: 20),
+                          child: const Icon(Icons.edit_note_rounded, color: AppColors.primary, size: 20),
                         ),
-                        title: Text(item.title, style: AppTypography.titleMedium),
+                        title: Text(item.title, style: typo.titleMedium),
                         subtitle: Text(
                           item.content,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: AppTypography.bodySmall,
+                          style: typo.bodySmall,
                         ),
                         trailing: Text(
                           AppDateUtils.formatDisplay(item.createdAt, 'HH:mm'),
-                          style: AppTypography.monoLabel,
+                          style: typo.monoLabel,
                         ),
                       );
                     },

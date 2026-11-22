@@ -17,17 +17,6 @@ class SummaryScreen extends ConsumerWidget {
       firstDate: DateTime(2020),
       lastDate: DateTime.now().add(const Duration(days: 365)),
       initialDateRange: DateTimeRange(start: state.startDate, end: state.endDate),
-      builder: (ctx, child) {
-        return Theme(
-          data: ThemeData.dark().copyWith(
-            colorScheme: const ColorScheme.dark(
-              primary: AppColors.primary,
-              surface: AppColors.surfaceElevated,
-            ),
-          ),
-          child: child!,
-        );
-      },
     );
 
     if (picked != null) {
@@ -45,17 +34,19 @@ class SummaryScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final colors = context.colors;
+    final typo = context.typo;
     final summaryState = ref.watch(summaryProvider);
     final settings = ref.watch(settingsProvider);
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: colors.background,
       appBar: AppBar(
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Journal Summary', style: AppTypography.headlineLarge),
-            Text('Synthesize insights & export report', style: AppTypography.bodySmall),
+            Text('Journal Summary', style: typo.headlineLarge),
+            Text('Synthesize insights & export report', style: typo.bodySmall),
           ],
         ),
       ),
@@ -67,11 +58,11 @@ class SummaryScreen extends ConsumerWidget {
             children: [
               // Date Range Picker Card
               Container(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(18),
                 decoration: BoxDecoration(
-                  color: AppColors.surface,
+                  color: colors.surface,
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: AppColors.border),
+                  border: Border.all(color: colors.border),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -79,21 +70,14 @@ class SummaryScreen extends ConsumerWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('SUMMARY PERIOD', style: AppTypography.monoLabel),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                          decoration: BoxDecoration(
-                            color: AppColors.primary.withValues(alpha: 0.12),
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          child: Text(
-                            settings.aiProvider == 'gemini' && settings.geminiApiKey.isNotEmpty
-                                ? 'Gemini AI Active'
-                                : 'Local Heuristic AI',
-                            style: AppTypography.monoLabel.copyWith(
-                              color: AppColors.primary,
-                              fontSize: 10,
-                            ),
+                        Text('SUMMARY PERIOD', style: typo.monoLabel),
+                        Text(
+                          settings.aiProvider == 'gemini' && settings.geminiApiKey.isNotEmpty
+                              ? 'Gemini Cloud'
+                              : 'Local Engine',
+                          style: typo.monoLabel.copyWith(
+                            color: AppColors.primary,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ],
@@ -106,9 +90,9 @@ class SummaryScreen extends ConsumerWidget {
                       child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                         decoration: BoxDecoration(
-                          color: AppColors.surfaceElevated,
+                          color: colors.surfaceElevated,
                           borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: AppColors.border),
+                          border: Border.all(color: colors.border),
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -119,11 +103,11 @@ class SummaryScreen extends ConsumerWidget {
                                 const SizedBox(width: 10),
                                 Text(
                                   '${AppDateUtils.formatDisplay(summaryState.startDate)} - ${AppDateUtils.formatDisplay(summaryState.endDate)}',
-                                  style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.w600),
+                                  style: typo.titleMedium.copyWith(fontWeight: FontWeight.w600),
                                 ),
                               ],
                             ),
-                            const Icon(Icons.edit_calendar_rounded, color: AppColors.textMuted, size: 18),
+                            Icon(Icons.edit_calendar_rounded, color: colors.textMuted, size: 18),
                           ],
                         ),
                       ),
@@ -136,11 +120,11 @@ class SummaryScreen extends ConsumerWidget {
                       scrollDirection: Axis.horizontal,
                       child: Row(
                         children: [
-                          _buildPresetChip('Last 7 Days', () => _setPresetRange(ref, 7)),
-                          _buildPresetChip('Last 30 Days', () => _setPresetRange(ref, 30)),
-                          _buildPresetChip('Past 3 Months', () => _setPresetRange(ref, 90)),
-                          _buildPresetChip('Past 6 Months', () => _setPresetRange(ref, 180)),
-                          _buildPresetChip('This Year', () {
+                          _buildPresetChip(context, 'Last 7 Days', () => _setPresetRange(ref, 7)),
+                          _buildPresetChip(context, 'Last 30 Days', () => _setPresetRange(ref, 30)),
+                          _buildPresetChip(context, 'Past 3 Months', () => _setPresetRange(ref, 90)),
+                          _buildPresetChip(context, 'Past 6 Months', () => _setPresetRange(ref, 180)),
+                          _buildPresetChip(context, 'This Year', () {
                             final now = DateTime.now();
                             ref.read(summaryProvider.notifier).setDateRange(
                               DateTime(now.year, 1, 1),
@@ -175,8 +159,8 @@ class SummaryScreen extends ConsumerWidget {
                               )
                             : const Icon(Icons.auto_awesome_rounded, size: 20),
                         label: Text(
-                          summaryState.isLoading ? 'Synthesizing with AI...' : 'Generate Summary',
-                          style: AppTypography.titleMedium.copyWith(
+                          summaryState.isLoading ? 'Generating Summary...' : 'Generate Summary',
+                          style: typo.titleMedium.copyWith(
                             color: Colors.black,
                             fontWeight: FontWeight.w700,
                           ),
@@ -205,7 +189,7 @@ class SummaryScreen extends ConsumerWidget {
                       Expanded(
                         child: Text(
                           summaryState.errorMessage!,
-                          style: AppTypography.bodySmall.copyWith(color: AppColors.error),
+                          style: typo.bodySmall.copyWith(color: AppColors.error),
                         ),
                       ),
                     ],
@@ -222,23 +206,23 @@ class SummaryScreen extends ConsumerWidget {
                         Container(
                           padding: const EdgeInsets.all(20),
                           decoration: BoxDecoration(
-                            color: AppColors.surface,
+                            color: colors.surface,
                             shape: BoxShape.circle,
-                            border: Border.all(color: AppColors.border),
+                            border: Border.all(color: colors.border),
                           ),
                           child: const Icon(
                             Icons.auto_awesome_outlined,
                             size: 40,
-                            color: AppColors.primaryLight,
+                            color: AppColors.primary,
                           ),
                         ),
                         const SizedBox(height: 16),
-                        Text('AI Period Summary', style: AppTypography.titleLarge),
+                        Text('Period Summary', style: typo.titleLarge),
                         const SizedBox(height: 8),
                         Text(
                           'Select your date range and generate a structured overview of your learnings, achievements, and challenges.',
                           textAlign: TextAlign.center,
-                          style: AppTypography.bodyMedium,
+                          style: typo.bodyMedium,
                         ),
                       ],
                     ),
@@ -253,7 +237,10 @@ class SummaryScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildPresetChip(String label, VoidCallback onTap) {
+  Widget _buildPresetChip(BuildContext context, String label, VoidCallback onTap) {
+    final colors = context.colors;
+    final typo = context.typo;
+
     return Padding(
       padding: const EdgeInsets.only(right: 8),
       child: GestureDetector(
@@ -261,14 +248,14 @@ class SummaryScreen extends ConsumerWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(
-            color: AppColors.surfaceElevated,
+            color: colors.surfaceElevated,
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: AppColors.border),
+            border: Border.all(color: colors.border),
           ),
           child: Text(
             label,
-            style: AppTypography.monoLabel.copyWith(
-              color: AppColors.textSecondary,
+            style: typo.monoLabel.copyWith(
+              color: colors.textSecondary,
               fontSize: 11,
             ),
           ),
@@ -278,6 +265,9 @@ class SummaryScreen extends ConsumerWidget {
   }
 
   Widget _buildSummaryResultView(BuildContext context, JournalSummary summary) {
+    final colors = context.colors;
+    final typo = context.typo;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -285,12 +275,12 @@ class SummaryScreen extends ConsumerWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('SUMMARY REPORT', style: AppTypography.monoLabel),
+            Text('SUMMARY REPORT', style: typo.monoLabel),
             ElevatedButton.icon(
               onPressed: () => PdfExportService.exportSummaryPdf(summary),
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.surfaceElevated,
-                foregroundColor: AppColors.primaryLight,
+                backgroundColor: colors.surface,
+                foregroundColor: AppColors.primary,
                 side: const BorderSide(color: AppColors.primary, width: 1),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                 padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
@@ -298,8 +288,8 @@ class SummaryScreen extends ConsumerWidget {
               icon: const Icon(Icons.picture_as_pdf_rounded, size: 18),
               label: Text(
                 'Export PDF',
-                style: AppTypography.titleMedium.copyWith(
-                  color: AppColors.primaryLight,
+                style: typo.titleMedium.copyWith(
+                  color: AppColors.primary,
                   fontSize: 13,
                   fontWeight: FontWeight.w700,
                 ),
@@ -313,9 +303,9 @@ class SummaryScreen extends ConsumerWidget {
         Container(
           padding: const EdgeInsets.all(18),
           decoration: BoxDecoration(
-            color: AppColors.surface,
+            color: colors.surface,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: AppColors.border),
+            border: Border.all(color: colors.border),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -324,25 +314,25 @@ class SummaryScreen extends ConsumerWidget {
                 children: [
                   const Icon(Icons.summarize_rounded, color: AppColors.primary, size: 20),
                   const SizedBox(width: 8),
-                  Text('Executive Overview', style: AppTypography.titleLarge),
+                  Text('Executive Overview', style: typo.titleLarge),
                 ],
               ),
               const SizedBox(height: 10),
               Text(
                 summary.executiveSummary,
-                style: AppTypography.bodyLarge.copyWith(height: 1.6),
+                style: typo.bodyLarge.copyWith(height: 1.6),
               ),
               const SizedBox(height: 14),
               Row(
                 children: [
                   Text(
                     '${summary.totalEntries} entries analyzed',
-                    style: AppTypography.monoLabel.copyWith(color: AppColors.textMuted),
+                    style: typo.monoLabel.copyWith(color: colors.textMuted),
                   ),
                   const Spacer(),
                   Text(
                     summary.providerUsed,
-                    style: AppTypography.monoLabel.copyWith(color: AppColors.primaryLight, fontSize: 10),
+                    style: typo.monoLabel.copyWith(color: AppColors.primary, fontSize: 10),
                   ),
                 ],
               ),
@@ -354,6 +344,7 @@ class SummaryScreen extends ConsumerWidget {
 
         // Section: Key Activities
         _buildSectionCard(
+          context: context,
           title: 'Key Activities & Timeline',
           icon: Icons.checklist_rounded,
           accentColor: AppColors.primary,
@@ -364,6 +355,7 @@ class SummaryScreen extends ConsumerWidget {
 
         // Section: Learnings & Insights
         _buildSectionCard(
+          context: context,
           title: 'Key Learnings & Insights',
           icon: Icons.lightbulb_outline_rounded,
           accentColor: AppColors.accentIndigo,
@@ -374,6 +366,7 @@ class SummaryScreen extends ConsumerWidget {
 
         // Section: Achievements & Milestones
         _buildSectionCard(
+          context: context,
           title: 'Achievements & Milestones',
           icon: Icons.emoji_events_outlined,
           accentColor: AppColors.accentGold,
@@ -384,6 +377,7 @@ class SummaryScreen extends ConsumerWidget {
 
         // Section: Challenges & Obstacles
         _buildSectionCard(
+          context: context,
           title: 'Challenges & Obstacles',
           icon: Icons.shield_outlined,
           accentColor: AppColors.accentRose,
@@ -394,6 +388,7 @@ class SummaryScreen extends ConsumerWidget {
   }
 
   Widget _buildSectionCard({
+    required BuildContext context,
     required String title,
     required IconData icon,
     required Color accentColor,
@@ -401,12 +396,15 @@ class SummaryScreen extends ConsumerWidget {
   }) {
     if (items.isEmpty) return const SizedBox.shrink();
 
+    final colors = context.colors;
+    final typo = context.typo;
+
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.border),
+        border: Border.all(color: colors.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -415,7 +413,7 @@ class SummaryScreen extends ConsumerWidget {
             children: [
               Icon(icon, color: accentColor, size: 20),
               const SizedBox(width: 8),
-              Text(title, style: AppTypography.titleLarge),
+              Text(title, style: typo.titleLarge),
             ],
           ),
           const SizedBox(height: 14),
@@ -440,7 +438,7 @@ class SummaryScreen extends ConsumerWidget {
                   Expanded(
                     child: Text(
                       item,
-                      style: AppTypography.bodyMedium.copyWith(height: 1.5),
+                      style: typo.bodyMedium.copyWith(height: 1.5),
                     ),
                   ),
                 ],

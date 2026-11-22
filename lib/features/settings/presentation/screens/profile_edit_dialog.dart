@@ -1,6 +1,6 @@
+import 'package:daymark/core/constants/app_colors.dart';
+import 'package:daymark/core/constants/app_typography.dart';
 import 'package:flutter/material.dart';
-import '../../../../core/constants/app_colors.dart';
-import '../../../../core/constants/app_typography.dart';
 
 class ProfileEditDialog extends StatefulWidget {
   final String currentName;
@@ -36,26 +36,37 @@ class _ProfileEditDialogState extends State<ProfileEditDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
+    final typo = context.typo;
+
     return AlertDialog(
-      backgroundColor: AppColors.surfaceElevated,
-      title: Text('Edit Profile', style: AppTypography.headlineMedium),
+      backgroundColor: colors.surface,
+      title: Text('Edit Profile', style: typo.headlineMedium),
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('NAME', style: AppTypography.monoLabel),
+            Text('NAME', style: typo.monoLabel),
             const SizedBox(height: 6),
             TextField(
               controller: _nameController,
-              decoration: const InputDecoration(hintText: 'Your name or moniker'),
+              style: typo.bodyMedium.copyWith(color: colors.textPrimary),
+              decoration: InputDecoration(
+                hintText: 'Your name or moniker',
+                hintStyle: typo.bodyMedium.copyWith(color: colors.textMuted),
+              ),
             ),
             const SizedBox(height: 16),
-            Text('BIO / MOTTO', style: AppTypography.monoLabel),
+            Text('BIO / MOTTO', style: typo.monoLabel),
             const SizedBox(height: 6),
             TextField(
               controller: _bioController,
-              decoration: const InputDecoration(hintText: 'e.g. Every day leaves a mark.'),
+              style: typo.bodyMedium.copyWith(color: colors.textPrimary),
+              decoration: InputDecoration(
+                hintText: 'e.g. Every day leaves a mark.',
+                hintStyle: typo.bodyMedium.copyWith(color: colors.textMuted),
+              ),
               maxLines: 2,
             ),
           ],
@@ -64,7 +75,7 @@ class _ProfileEditDialogState extends State<ProfileEditDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: Text('Cancel', style: AppTypography.labelMedium),
+          child: Text('Cancel', style: typo.labelMedium),
         ),
         ElevatedButton(
           onPressed: () {

@@ -49,12 +49,14 @@ class _MainNavigationShellState extends ConsumerState<MainNavigationShell> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
+    final typo = context.typo;
     final settings = ref.watch(settingsProvider);
 
     // If PIN is enabled and not yet unlocked in this session, show lock screen
     if (settings.pinEnabled && settings.pinCode != null && !_isUnlocked) {
       return Scaffold(
-        backgroundColor: AppColors.background,
+        backgroundColor: colors.background,
         body: SafeArea(
           child: Center(
             child: SingleChildScrollView(
@@ -66,16 +68,16 @@ class _MainNavigationShellState extends ConsumerState<MainNavigationShell> {
                     width: 72,
                     height: 72,
                     decoration: BoxDecoration(
-                      color: AppColors.surfaceElevated,
+                      color: colors.surfaceElevated,
                       shape: BoxShape.circle,
                       border: Border.all(color: AppColors.primary.withValues(alpha: 0.4)),
                     ),
                     child: const Icon(Icons.lock_rounded, size: 36, color: AppColors.primary),
                   ),
                   const SizedBox(height: 20),
-                  Text('DAYMARK', style: AppTypography.displayMedium),
+                  Text('DAYMARK', style: typo.displayMedium),
                   const SizedBox(height: 6),
-                  Text('Enter your security PIN to access your journal', style: AppTypography.bodySmall),
+                  Text('Enter your security PIN to access your journal', style: typo.bodySmall),
                   const SizedBox(height: 28),
                   SizedBox(
                     width: 220,
@@ -85,18 +87,18 @@ class _MainNavigationShellState extends ConsumerState<MainNavigationShell> {
                       obscureText: true,
                       textAlign: TextAlign.center,
                       maxLength: 6,
-                      style: AppTypography.displayLarge.copyWith(letterSpacing: 8, fontSize: 28),
+                      style: typo.displayLarge.copyWith(letterSpacing: 8, fontSize: 28),
                       decoration: InputDecoration(
                         counterText: '',
                         hintText: '••••',
-                        hintStyle: AppTypography.displayMedium.copyWith(color: AppColors.textMuted),
+                        hintStyle: typo.displayMedium.copyWith(color: colors.textMuted),
                       ),
                       onSubmitted: (_) => _verifyPin(settings.pinCode!),
                     ),
                   ),
                   if (_pinError != null) ...[
                     const SizedBox(height: 12),
-                    Text(_pinError!, style: AppTypography.monoLabel.copyWith(color: AppColors.error)),
+                    Text(_pinError!, style: typo.monoLabel.copyWith(color: AppColors.error)),
                   ],
                   const SizedBox(height: 24),
                   ElevatedButton(
@@ -107,7 +109,7 @@ class _MainNavigationShellState extends ConsumerState<MainNavigationShell> {
                       padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
-                    child: Text('Unlock', style: AppTypography.titleMedium.copyWith(color: Colors.black, fontWeight: FontWeight.w700)),
+                    child: Text('Unlock', style: typo.titleMedium.copyWith(color: Colors.black, fontWeight: FontWeight.w700)),
                   ),
                 ],
               ),
@@ -118,13 +120,14 @@ class _MainNavigationShellState extends ConsumerState<MainNavigationShell> {
     }
 
     return Scaffold(
+      backgroundColor: colors.background,
       body: IndexedStack(
         index: _currentIndex,
         children: _screens,
       ),
       bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
-          border: Border(top: BorderSide(color: AppColors.border, width: 1)),
+        decoration: BoxDecoration(
+          border: Border(top: BorderSide(color: colors.border, width: 1)),
         ),
         child: BottomNavigationBar(
           currentIndex: _currentIndex,

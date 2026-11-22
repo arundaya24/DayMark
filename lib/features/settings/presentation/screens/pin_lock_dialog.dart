@@ -1,6 +1,6 @@
+import 'package:daymark/core/constants/app_colors.dart';
+import 'package:daymark/core/constants/app_typography.dart';
 import 'package:flutter/material.dart';
-import '../../../../core/constants/app_colors.dart';
-import '../../../../core/constants/app_typography.dart';
 
 class PinLockDialog extends StatefulWidget {
   final bool isEnabling;
@@ -43,9 +43,12 @@ class _PinLockDialogState extends State<PinLockDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
+    final typo = context.typo;
+
     return AlertDialog(
-      backgroundColor: AppColors.surfaceElevated,
-      title: Text(widget.isEnabling ? 'Set Security PIN' : 'Enter Current PIN', style: AppTypography.headlineMedium),
+      backgroundColor: colors.surface,
+      title: Text(widget.isEnabling ? 'Set Security PIN' : 'Enter Current PIN', style: typo.headlineMedium),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -54,7 +57,7 @@ class _PinLockDialogState extends State<PinLockDialog> {
             widget.isEnabling
                 ? 'Create a 4-digit PIN to lock your personal journal.'
                 : 'Enter your PIN to disable security lock.',
-            style: AppTypography.bodySmall,
+            style: typo.bodySmall,
           ),
           const SizedBox(height: 16),
           TextField(
@@ -62,7 +65,11 @@ class _PinLockDialogState extends State<PinLockDialog> {
             keyboardType: TextInputType.number,
             obscureText: true,
             maxLength: 6,
-            decoration: const InputDecoration(hintText: 'Enter PIN'),
+            style: typo.headlineMedium.copyWith(color: colors.textPrimary),
+            decoration: InputDecoration(
+              hintText: 'Enter PIN',
+              hintStyle: typo.bodyMedium.copyWith(color: colors.textMuted),
+            ),
           ),
           if (widget.isEnabling) ...[
             const SizedBox(height: 10),
@@ -71,19 +78,23 @@ class _PinLockDialogState extends State<PinLockDialog> {
               keyboardType: TextInputType.number,
               obscureText: true,
               maxLength: 6,
-              decoration: const InputDecoration(hintText: 'Confirm PIN'),
+              style: typo.headlineMedium.copyWith(color: colors.textPrimary),
+              decoration: InputDecoration(
+                hintText: 'Confirm PIN',
+                hintStyle: typo.bodyMedium.copyWith(color: colors.textMuted),
+              ),
             ),
           ],
           if (_errorMessage != null) ...[
             const SizedBox(height: 8),
-            Text(_errorMessage!, style: AppTypography.monoLabel.copyWith(color: AppColors.error)),
+            Text(_errorMessage!, style: typo.monoLabel.copyWith(color: AppColors.error)),
           ],
         ],
       ),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: Text('Cancel', style: AppTypography.labelMedium),
+          child: Text('Cancel', style: typo.labelMedium),
         ),
         ElevatedButton(
           onPressed: _submit,

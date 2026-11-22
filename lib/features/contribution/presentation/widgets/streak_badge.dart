@@ -15,6 +15,8 @@ class StreakBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
+    final typo = context.typo;
     final bool hasStreak = currentStreak > 0;
 
     return GestureDetector(
@@ -22,10 +24,10 @@ class StreakBadge extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
         decoration: BoxDecoration(
-          color: hasStreak ? AppColors.accentGold.withValues(alpha: 0.12) : AppColors.surfaceHighlight,
+          color: hasStreak ? AppColors.accentGold.withValues(alpha: 0.12) : colors.surfaceHighlight,
           borderRadius: BorderRadius.circular(30),
           border: Border.all(
-            color: hasStreak ? AppColors.accentGold.withValues(alpha: 0.4) : AppColors.border,
+            color: hasStreak ? AppColors.accentGold.withValues(alpha: 0.4) : colors.border,
             width: 1,
           ),
         ),
@@ -34,22 +36,22 @@ class StreakBadge extends StatelessWidget {
           children: [
             Icon(
               Icons.local_fire_department_rounded,
-              color: hasStreak ? AppColors.accentGold : AppColors.textMuted,
+              color: hasStreak ? AppColors.accentGold : colors.textMuted,
               size: 20,
             ),
             const SizedBox(width: 6),
             Text(
               '$currentStreak',
-              style: AppTypography.titleMedium.copyWith(
-                color: hasStreak ? AppColors.accentGold : AppColors.textMuted,
+              style: typo.titleMedium.copyWith(
+                color: hasStreak ? AppColors.accentGold : colors.textMuted,
                 fontWeight: FontWeight.w700,
               ),
             ),
             const SizedBox(width: 4),
             Text(
               'day streak',
-              style: AppTypography.labelMedium.copyWith(
-                color: hasStreak ? AppColors.accentGold.withValues(alpha: 0.9) : AppColors.textMuted,
+              style: typo.labelMedium.copyWith(
+                color: hasStreak ? AppColors.accentGold.withValues(alpha: 0.9) : colors.textMuted,
                 fontSize: 11,
               ),
             ),
@@ -73,6 +75,7 @@ class StatsGrid extends StatelessWidget {
           children: [
             Expanded(
               child: _buildStatCard(
+                context: context,
                 title: 'Current Streak',
                 value: '${stats.currentStreak} Days',
                 icon: Icons.local_fire_department_rounded,
@@ -82,6 +85,7 @@ class StatsGrid extends StatelessWidget {
             const SizedBox(width: 12),
             Expanded(
               child: _buildStatCard(
+                context: context,
                 title: 'Longest Streak',
                 value: '${stats.longestStreak} Days',
                 icon: Icons.emoji_events_rounded,
@@ -95,6 +99,7 @@ class StatsGrid extends StatelessWidget {
           children: [
             Expanded(
               child: _buildStatCard(
+                context: context,
                 title: 'Total Active Days',
                 value: '${stats.totalActiveDays}',
                 icon: Icons.calendar_today_rounded,
@@ -104,7 +109,8 @@ class StatsGrid extends StatelessWidget {
             const SizedBox(width: 12),
             Expanded(
               child: _buildStatCard(
-                title: 'Contributions',
+                context: context,
+                title: 'Total Marks',
                 value: '${stats.totalContributions}',
                 icon: Icons.auto_graph_rounded,
                 iconColor: AppColors.accentIndigo,
@@ -117,17 +123,21 @@ class StatsGrid extends StatelessWidget {
   }
 
   Widget _buildStatCard({
+    required BuildContext context,
     required String title,
     required String value,
     required IconData icon,
     required Color iconColor,
   }) {
+    final colors = context.colors;
+    final typo = context.typo;
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.border, width: 1),
+        border: Border.all(color: colors.border, width: 1),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -135,14 +145,14 @@ class StatsGrid extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(title, style: AppTypography.bodySmall),
+              Text(title, style: typo.bodySmall),
               Icon(icon, color: iconColor, size: 20),
             ],
           ),
           const SizedBox(height: 10),
           Text(
             value,
-            style: AppTypography.headlineMedium.copyWith(
+            style: typo.headlineMedium.copyWith(
               fontWeight: FontWeight.w700,
             ),
           ),

@@ -18,6 +18,8 @@ class DashboardScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final colors = context.colors;
+    final typo = context.typo;
     final settings = ref.watch(settingsProvider);
     final streakStatsAsync = ref.watch(streakStatsProvider);
     final recentJournalsAsync = ref.watch(recentJournalsProvider);
@@ -27,11 +29,11 @@ class DashboardScreen extends ConsumerWidget {
     final greeting = AppDateUtils.getTimeGreeting(now);
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: colors.background,
       body: SafeArea(
         child: RefreshIndicator(
           color: AppColors.primary,
-          backgroundColor: AppColors.surfaceElevated,
+          backgroundColor: colors.surfaceElevated,
           onRefresh: () async {
             ref.invalidate(streakStatsProvider);
             ref.invalidate(recentJournalsProvider);
@@ -53,13 +55,13 @@ class DashboardScreen extends ConsumerWidget {
                       children: [
                         Text(
                           '$greeting, ${settings.userName}',
-                          style: AppTypography.displayMedium.copyWith(fontSize: 22),
+                          style: typo.displayMedium.copyWith(fontSize: 22),
                         ),
                         const SizedBox(height: 4),
                         Text(
                           AppDateUtils.formatDisplay(now, 'EEEE, dd MMMM yyyy'),
-                          style: AppTypography.monoLabel.copyWith(
-                            color: AppColors.textMuted,
+                          style: typo.monoLabel.copyWith(
+                            color: colors.textMuted,
                             fontSize: 12,
                           ),
                         ),
@@ -68,24 +70,20 @@ class DashboardScreen extends ConsumerWidget {
                     streakStatsAsync.when(
                       data: (stats) => StreakBadge(currentStreak: stats.currentStreak),
                       loading: () => const SizedBox.shrink(),
-                      error: (err, stack) => const SizedBox.shrink(),
+                      error: (_, __) => const SizedBox.shrink(),
                     ),
                   ],
                 ),
 
                 const SizedBox(height: 20),
 
-                // Quick Action Hero Banner
+                // Quick Action Action Card (Clean, theme-adaptive, no excessive gradients)
                 Container(
                   padding: const EdgeInsets.all(18),
                   decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFF13322B), Color(0xFF14181F)],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
+                    color: colors.surface,
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: AppColors.primaryDark.withValues(alpha: 0.5), width: 1),
+                    border: Border.all(color: colors.border, width: 1),
                   ),
                   child: Row(
                     children: [
@@ -95,15 +93,15 @@ class DashboardScreen extends ConsumerWidget {
                           children: [
                             Text(
                               'Every day leaves a mark.',
-                              style: AppTypography.titleLarge.copyWith(
-                                color: AppColors.primaryLight,
+                              style: typo.titleLarge.copyWith(
+                                color: AppColors.primary,
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
                             const SizedBox(height: 4),
                             Text(
                               'Capture a reflection, insight, or achievement for today.',
-                              style: AppTypography.bodySmall.copyWith(color: AppColors.textSecondary),
+                              style: typo.bodySmall,
                             ),
                           ],
                         ),
@@ -126,7 +124,7 @@ class DashboardScreen extends ConsumerWidget {
                         icon: const Icon(Icons.add, size: 18),
                         label: Text(
                           'Mark Today',
-                          style: AppTypography.titleMedium.copyWith(
+                          style: typo.titleMedium.copyWith(
                             color: Colors.black,
                             fontSize: 13,
                             fontWeight: FontWeight.w700,
@@ -148,7 +146,7 @@ class DashboardScreen extends ConsumerWidget {
                       child: CircularProgressIndicator(color: AppColors.primary),
                     ),
                   ),
-                  error: (err, _) => Text('Error loading stats: $err', style: AppTypography.bodySmall),
+                  error: (err, _) => Text('Error loading stats: $err', style: typo.bodySmall),
                 ),
 
                 const SizedBox(height: 20),
@@ -160,16 +158,16 @@ class DashboardScreen extends ConsumerWidget {
                     repository: repository,
                   ),
                   loading: () => const SizedBox.shrink(),
-                  error: (err, stack) => const SizedBox.shrink(),
+                  error: (_, __) => const SizedBox.shrink(),
                 ),
 
                 const SizedBox(height: 20),
 
                 // Monthly Statistics Card
                 streakStatsAsync.when(
-                  data: (stats) => _buildMonthlyStatsCard(stats),
+                  data: (stats) => _buildMonthlyStatsCard(context, stats),
                   loading: () => const SizedBox.shrink(),
-                  error: (err, stack) => const SizedBox.shrink(),
+                  error: (_, __) => const SizedBox.shrink(),
                 ),
 
                 const SizedBox(height: 24),
@@ -178,10 +176,10 @@ class DashboardScreen extends ConsumerWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('RECENT MARKS', style: AppTypography.monoLabel),
+                    Text('RECENT MARKS', style: typo.monoLabel),
                     Text(
                       'Last 5 Entries',
-                      style: AppTypography.monoLabel.copyWith(color: AppColors.textMuted),
+                      style: typo.monoLabel.copyWith(color: colors.textMuted),
                     ),
                   ],
                 ),
@@ -195,19 +193,19 @@ class DashboardScreen extends ConsumerWidget {
                         width: double.infinity,
                         padding: const EdgeInsets.all(24),
                         decoration: BoxDecoration(
-                          color: AppColors.surface,
+                          color: colors.surface,
                           borderRadius: BorderRadius.circular(16),
-                          border: Border.all(color: AppColors.border),
+                          border: Border.all(color: colors.border),
                         ),
                         child: Column(
                           children: [
-                            const Icon(Icons.edit_note_rounded, size: 36, color: AppColors.textMuted),
+                            Icon(Icons.edit_note_rounded, size: 36, color: colors.textMuted),
                             const SizedBox(height: 10),
-                            Text('No marks recorded yet', style: AppTypography.titleMedium),
+                            Text('No marks recorded yet', style: typo.titleMedium),
                             const SizedBox(height: 4),
                             Text(
                               'Tap "Mark Today" above to start your streak!',
-                              style: AppTypography.bodySmall,
+                              style: typo.bodySmall,
                             ),
                           ],
                         ),
@@ -232,7 +230,7 @@ class DashboardScreen extends ConsumerWidget {
                     );
                   },
                   loading: () => const Center(child: CircularProgressIndicator(color: AppColors.primary)),
-                  error: (e, _) => Text('Error: $e', style: AppTypography.bodySmall),
+                  error: (e, _) => Text('Error: $e', style: typo.bodySmall),
                 ),
 
                 const SizedBox(height: 30),
@@ -244,13 +242,16 @@ class DashboardScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildMonthlyStatsCard(StreakStats stats) {
+  Widget _buildMonthlyStatsCard(BuildContext context, StreakStats stats) {
+    final colors = context.colors;
+    final typo = context.typo;
+
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.border),
+        border: Border.all(color: colors.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -262,12 +263,12 @@ class DashboardScreen extends ConsumerWidget {
                 children: [
                   const Icon(Icons.insights_rounded, color: AppColors.primary, size: 18),
                   const SizedBox(width: 8),
-                  Text('Activity Breakdown', style: AppTypography.titleLarge),
+                  Text('Activity Breakdown', style: typo.titleLarge),
                 ],
               ),
               Text(
                 'This Month: ${stats.thisMonthContributions}',
-                style: AppTypography.monoLabel.copyWith(color: AppColors.primaryLight),
+                style: typo.monoLabel.copyWith(color: AppColors.primary),
               ),
             ],
           ),
@@ -275,11 +276,11 @@ class DashboardScreen extends ConsumerWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _buildStatMetric('This Week', '${stats.thisWeekContributions}', Icons.view_week_outlined),
-              Container(width: 1, height: 36, color: AppColors.borderSubtle),
-              _buildStatMetric('This Month', '${stats.thisMonthContributions}', Icons.calendar_month_outlined),
-              Container(width: 1, height: 36, color: AppColors.borderSubtle),
-              _buildStatMetric('This Year', '${stats.thisYearContributions}', Icons.date_range_outlined),
+              _buildStatMetric(context, 'This Week', '${stats.thisWeekContributions}', Icons.view_week_outlined),
+              Container(width: 1, height: 36, color: colors.borderSubtle),
+              _buildStatMetric(context, 'This Month', '${stats.thisMonthContributions}', Icons.calendar_month_outlined),
+              Container(width: 1, height: 36, color: colors.borderSubtle),
+              _buildStatMetric(context, 'This Year', '${stats.thisYearContributions}', Icons.date_range_outlined),
             ],
           ),
         ],
@@ -287,14 +288,17 @@ class DashboardScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildStatMetric(String label, String value, IconData icon) {
+  Widget _buildStatMetric(BuildContext context, String label, String value, IconData icon) {
+    final colors = context.colors;
+    final typo = context.typo;
+
     return Column(
       children: [
-        Icon(icon, size: 18, color: AppColors.textMuted),
+        Icon(icon, size: 18, color: colors.textMuted),
         const SizedBox(height: 6),
-        Text(value, style: AppTypography.headlineMedium.copyWith(fontWeight: FontWeight.w700)),
+        Text(value, style: typo.headlineMedium.copyWith(fontWeight: FontWeight.w700)),
         const SizedBox(height: 2),
-        Text(label, style: AppTypography.bodySmall),
+        Text(label, style: typo.bodySmall),
       ],
     );
   }

@@ -14,19 +14,21 @@ class JournalListScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final colors = context.colors;
+    final typo = context.typo;
     final filterState = ref.watch(journalFilterProvider);
     final filterNotifier = ref.read(journalFilterProvider.notifier);
     final journalListAsync = ref.watch(journalListProvider);
     final settings = ref.watch(settingsProvider);
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: colors.background,
       appBar: AppBar(
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Timeline', style: AppTypography.headlineLarge),
-            Text('Every day leaves a mark.', style: AppTypography.bodySmall),
+            Text('Timeline', style: typo.headlineLarge),
+            Text('Every day leaves a mark.', style: typo.bodySmall),
           ],
         ),
       ),
@@ -35,7 +37,7 @@ class JournalListScreen extends ConsumerWidget {
         foregroundColor: Colors.black,
         elevation: 4,
         icon: const Icon(Icons.edit_outlined),
-        label: Text('New Entry', style: AppTypography.titleMedium.copyWith(color: Colors.black, fontWeight: FontWeight.w700)),
+        label: Text('New Entry', style: typo.titleMedium.copyWith(color: Colors.black, fontWeight: FontWeight.w700)),
         onPressed: () {
           Navigator.push(
             context,
@@ -67,7 +69,7 @@ class JournalListScreen extends ConsumerWidget {
                     child: CircularProgressIndicator(color: AppColors.primary),
                   ),
                   error: (err, _) => Center(
-                    child: Text('Error loading journals: $err', style: AppTypography.bodyMedium),
+                    child: Text('Error loading journals: $err', style: typo.bodyMedium),
                   ),
                   data: (entries) {
                     if (entries.isEmpty) {
@@ -78,24 +80,24 @@ class JournalListScreen extends ConsumerWidget {
                             Container(
                               padding: const EdgeInsets.all(20),
                               decoration: BoxDecoration(
-                                color: AppColors.surface,
+                                color: colors.surface,
                                 shape: BoxShape.circle,
-                                border: Border.all(color: AppColors.border),
+                                border: Border.all(color: colors.border),
                               ),
-                              child: const Icon(
+                              child: Icon(
                                 Icons.auto_stories_outlined,
                                 size: 48,
-                                color: AppColors.textMuted,
+                                color: colors.textMuted,
                               ),
                             ),
                             const SizedBox(height: 16),
-                            Text('No journals found', style: AppTypography.titleLarge),
+                            Text('No journals found', style: typo.titleLarge),
                             const SizedBox(height: 6),
                             Text(
                               filterState.searchQuery.isNotEmpty || filterState.selectedCategory != 'All' || filterState.startDate != null
                                   ? 'Try adjusting your filters or search terms.'
                                   : 'Begin documenting your thoughts and journey today.',
-                              style: AppTypography.bodyMedium,
+                              style: typo.bodyMedium,
                               textAlign: TextAlign.center,
                             ),
                           ],
@@ -105,7 +107,7 @@ class JournalListScreen extends ConsumerWidget {
 
                     return RefreshIndicator(
                       color: AppColors.primary,
-                      backgroundColor: AppColors.surfaceElevated,
+                      backgroundColor: colors.surfaceElevated,
                       onRefresh: () async {
                         await ref.read(journalListProvider.notifier).loadJournals();
                       },

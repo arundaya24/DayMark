@@ -14,19 +14,21 @@ class SettingsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final colors = context.colors;
+    final typo = context.typo;
     final settings = ref.watch(settingsProvider);
     final settingsNotifier = ref.read(settingsProvider.notifier);
     final repository = ref.watch(journalRepositoryProvider);
     final backupService = BackupService(repository);
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: colors.background,
       appBar: AppBar(
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Settings', style: AppTypography.headlineLarge),
-            Text('Preferences & System Config', style: AppTypography.bodySmall),
+            Text('Settings', style: typo.headlineLarge),
+            Text('Preferences & System Config', style: typo.bodySmall),
           ],
         ),
       ),
@@ -38,9 +40,9 @@ class SettingsScreen extends ConsumerWidget {
             Container(
               padding: const EdgeInsets.all(18),
               decoration: BoxDecoration(
-                color: AppColors.surface,
+                color: colors.surface,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: AppColors.border),
+                border: Border.all(color: colors.border),
               ),
               child: Row(
                 children: [
@@ -49,7 +51,7 @@ class SettingsScreen extends ConsumerWidget {
                     backgroundColor: AppColors.primary.withValues(alpha: 0.18),
                     child: Text(
                       settings.userName.isNotEmpty ? settings.userName.substring(0, 1).toUpperCase() : 'D',
-                      style: AppTypography.displayMedium.copyWith(
+                      style: typo.displayMedium.copyWith(
                         color: AppColors.primary,
                         fontSize: 24,
                       ),
@@ -60,9 +62,9 @@ class SettingsScreen extends ConsumerWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(settings.userName, style: AppTypography.titleLarge),
+                        Text(settings.userName, style: typo.titleLarge),
                         const SizedBox(height: 2),
-                        Text(settings.userBio, style: AppTypography.bodySmall),
+                        Text(settings.userBio, style: typo.bodySmall),
                       ],
                     ),
                   ),
@@ -91,14 +93,16 @@ class SettingsScreen extends ConsumerWidget {
             const SizedBox(height: 24),
 
             // Appearance & Theme Section
-            _buildSectionHeader('APPEARANCE'),
+            _buildSectionHeader('APPEARANCE', typo),
             _buildSettingsTile(
+              context: context,
               icon: Icons.dark_mode_outlined,
               title: 'Theme Preference',
               subtitle: 'Current: ${settings.themeMode.toUpperCase()} mode',
               onTap: () => _showThemePicker(context, ref, settings.themeMode),
             ),
             _buildSettingsTile(
+              context: context,
               icon: Icons.calendar_today_outlined,
               title: 'Date Format',
               subtitle: settings.dateFormat,
@@ -108,20 +112,26 @@ class SettingsScreen extends ConsumerWidget {
             const SizedBox(height: 20),
 
             // Privacy & Security Section
-            _buildSectionHeader('PRIVACY & SECURITY'),
-            SwitchListTile(
-              contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
-              tileColor: AppColors.surface,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              secondary: const Icon(Icons.visibility_off_outlined, color: AppColors.textSecondary),
-              title: Text('Hide Journal Previews', style: AppTypography.titleMedium),
-              subtitle: Text('Mask journal content previews in timeline', style: AppTypography.bodySmall),
-              value: settings.hidePreview,
-              activeThumbColor: AppColors.primary,
-              onChanged: (val) => settingsNotifier.setHidePreview(val),
+            _buildSectionHeader('PRIVACY & SECURITY', typo),
+            Container(
+              margin: const EdgeInsets.only(bottom: 8),
+              decoration: BoxDecoration(
+                color: colors.surface,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: colors.border),
+              ),
+              child: SwitchListTile(
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                secondary: Icon(Icons.visibility_off_outlined, color: colors.textSecondary),
+                title: Text('Hide Journal Previews', style: typo.titleMedium),
+                subtitle: Text('Mask journal content previews in timeline', style: typo.bodySmall),
+                value: settings.hidePreview,
+                activeThumbColor: AppColors.primary,
+                onChanged: (val) => settingsNotifier.setHidePreview(val),
+              ),
             ),
-            const SizedBox(height: 8),
             _buildSettingsTile(
+              context: context,
               icon: Icons.lock_outline_rounded,
               title: 'App PIN Security Lock',
               subtitle: settings.pinEnabled ? 'PIN Lock Enabled' : 'Disabled (Open Access)',
@@ -159,10 +169,11 @@ class SettingsScreen extends ConsumerWidget {
             const SizedBox(height: 20),
 
             // AI Service Configuration
-            _buildSectionHeader('AI & SUMMARY PROVIDER'),
+            _buildSectionHeader('AI & SUMMARY PROVIDER', typo),
             _buildSettingsTile(
+              context: context,
               icon: Icons.auto_awesome_rounded,
-              title: 'AI Summary Engine',
+              title: 'Summary Engine',
               subtitle: settings.aiProvider == 'gemini'
                   ? 'Cloud: Google Gemini (${settings.geminiModel})'
                   : 'Offline: Local Smart Heuristic Engine',
@@ -188,8 +199,9 @@ class SettingsScreen extends ConsumerWidget {
             const SizedBox(height: 20),
 
             // Data & Storage (Backup & Restore)
-            _buildSectionHeader('DATA & STORAGE'),
+            _buildSectionHeader('DATA & STORAGE', typo),
             _buildSettingsTile(
+              context: context,
               icon: Icons.file_upload_outlined,
               title: 'Backup Data (Export JSON)',
               subtitle: 'Export journals and activity history to file',
@@ -213,8 +225,8 @@ class SettingsScreen extends ConsumerWidget {
                 }
               },
             ),
-            const SizedBox(height: 8),
             _buildSettingsTile(
+              context: context,
               icon: Icons.file_download_outlined,
               title: 'Restore Data (Import JSON)',
               subtitle: 'Restore entries from previous DAYMARK backup',
@@ -246,11 +258,11 @@ class SettingsScreen extends ConsumerWidget {
             Center(
               child: Column(
                 children: [
-                  Text('DAYMARK', style: AppTypography.monoLabel.copyWith(fontWeight: FontWeight.w700, color: AppColors.primary)),
+                  Text('DAYMARK', style: typo.monoLabel.copyWith(fontWeight: FontWeight.w700, color: AppColors.primary)),
                   const SizedBox(height: 4),
-                  Text('"Every day leaves a mark."', style: AppTypography.bodySmall),
+                  Text('"Every day leaves a mark."', style: typo.bodySmall),
                   const SizedBox(height: 2),
-                  Text('Version 1.0.0 • Mobile Production Build', style: AppTypography.monoLabel.copyWith(fontSize: 10)),
+                  Text('Version 1.0.0', style: typo.monoLabel.copyWith(fontSize: 10)),
                 ],
               ),
             ),
@@ -261,41 +273,48 @@ class SettingsScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildSectionHeader(String title) {
+  Widget _buildSectionHeader(String title, AppTypography typo) {
     return Padding(
       padding: const EdgeInsets.only(left: 4, bottom: 8),
-      child: Text(title, style: AppTypography.monoLabel),
+      child: Text(title, style: typo.monoLabel),
     );
   }
 
   Widget _buildSettingsTile({
+    required BuildContext context,
     required IconData icon,
     required String title,
     required String subtitle,
     VoidCallback? onTap,
     Widget? trailing,
   }) {
+    final colors = context.colors;
+    final typo = context.typo;
+
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.border),
+        border: Border.all(color: colors.border),
       ),
       child: ListTile(
         onTap: onTap,
-        leading: Icon(icon, color: AppColors.textSecondary, size: 22),
-        title: Text(title, style: AppTypography.titleMedium),
-        subtitle: Text(subtitle, style: AppTypography.bodySmall),
-        trailing: trailing ?? (onTap != null ? const Icon(Icons.chevron_right, color: AppColors.textMuted) : null),
+        leading: Icon(icon, color: colors.textSecondary, size: 22),
+        title: Text(title, style: typo.titleMedium),
+        subtitle: Text(subtitle, style: typo.bodySmall),
+        trailing: trailing ?? (onTap != null ? Icon(Icons.chevron_right, color: colors.textMuted) : null),
       ),
     );
   }
 
   void _showThemePicker(BuildContext context, WidgetRef ref, String current) {
+    final colors = context.colors;
+    final typo = context.typo;
+
     showModalBottomSheet(
       context: context,
-      backgroundColor: AppColors.surfaceElevated,
+      backgroundColor: colors.surface,
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (_) {
         return Padding(
@@ -303,10 +322,10 @@ class SettingsScreen extends ConsumerWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('Select Theme Mode', style: AppTypography.titleLarge),
+              Text('Select Theme Mode', style: typo.titleLarge),
               const SizedBox(height: 16),
               ListTile(
-                title: const Text('Dark Mode (Primary default)'),
+                title: Text('Dark Mode (Primary default)', style: typo.bodyLarge),
                 leading: const Icon(Icons.dark_mode_rounded, color: AppColors.primary),
                 trailing: current == 'dark' ? const Icon(Icons.check, color: AppColors.primary) : null,
                 onTap: () {
@@ -315,8 +334,8 @@ class SettingsScreen extends ConsumerWidget {
                 },
               ),
               ListTile(
-                title: const Text('Light Mode'),
-                leading: const Icon(Icons.light_mode_rounded),
+                title: Text('Light Mode', style: typo.bodyLarge),
+                leading: Icon(Icons.light_mode_rounded, color: colors.textSecondary),
                 trailing: current == 'light' ? const Icon(Icons.check, color: AppColors.primary) : null,
                 onTap: () {
                   ref.read(settingsProvider.notifier).setThemeMode('light');
@@ -324,8 +343,8 @@ class SettingsScreen extends ConsumerWidget {
                 },
               ),
               ListTile(
-                title: const Text('System Default'),
-                leading: const Icon(Icons.brightness_auto_rounded),
+                title: Text('System Default', style: typo.bodyLarge),
+                leading: Icon(Icons.brightness_auto_rounded, color: colors.textSecondary),
                 trailing: current == 'system' ? const Icon(Icons.check, color: AppColors.primary) : null,
                 onTap: () {
                   ref.read(settingsProvider.notifier).setThemeMode('system');
@@ -340,6 +359,9 @@ class SettingsScreen extends ConsumerWidget {
   }
 
   void _showDateFormatPicker(BuildContext context, WidgetRef ref, String current) {
+    final colors = context.colors;
+    final typo = context.typo;
+
     final formats = [
       'dd MMM yyyy', // 22 Nov 2026
       'yyyy-MM-dd', // 2026-11-22
@@ -349,7 +371,7 @@ class SettingsScreen extends ConsumerWidget {
 
     showModalBottomSheet(
       context: context,
-      backgroundColor: AppColors.surfaceElevated,
+      backgroundColor: colors.surface,
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (_) {
         return Padding(
@@ -357,11 +379,11 @@ class SettingsScreen extends ConsumerWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('Select Date Format', style: AppTypography.titleLarge),
+              Text('Select Date Format', style: typo.titleLarge),
               const SizedBox(height: 16),
               ...formats.map((fmt) {
                 return ListTile(
-                  title: Text(fmt),
+                  title: Text(fmt, style: typo.bodyLarge),
                   trailing: current == fmt ? const Icon(Icons.check, color: AppColors.primary) : null,
                   onTap: () {
                     ref.read(settingsProvider.notifier).setDateFormat(fmt);

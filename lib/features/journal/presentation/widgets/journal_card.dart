@@ -21,6 +21,8 @@ class JournalCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
+    final typo = context.typo;
     final category = AppCategories.getById(entry.category);
 
     return GestureDetector(
@@ -29,17 +31,17 @@ class JournalCard extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: AppColors.surface,
+          color: colors.surface,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: entry.isPinned ? AppColors.primary.withValues(alpha: 0.4) : AppColors.border,
+            color: entry.isPinned ? AppColors.primary.withValues(alpha: 0.5) : colors.border,
             width: entry.isPinned ? 1.5 : 1,
           ),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Top Row: Category Pill, Date & Pinned icon
+            // Top Row: Category Pill, Mood, Date & Pinned icon
             Row(
               children: [
                 Container(
@@ -55,7 +57,7 @@ class JournalCard extends StatelessWidget {
                       const SizedBox(width: 4),
                       Text(
                         category.name,
-                        style: AppTypography.monoLabel.copyWith(
+                        style: typo.monoLabel.copyWith(
                           color: category.color,
                           fontWeight: FontWeight.w600,
                         ),
@@ -68,12 +70,12 @@ class JournalCard extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
-                      color: AppColors.surfaceHighlight,
+                      color: colors.surfaceHighlight,
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: Text(
                       entry.mood!,
-                      style: AppTypography.monoLabel.copyWith(color: AppColors.textSecondary),
+                      style: typo.monoLabel.copyWith(color: colors.textSecondary),
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -86,7 +88,7 @@ class JournalCard extends StatelessWidget {
                   ),
                 Text(
                   AppDateUtils.formatRelative(entry.createdAt),
-                  style: AppTypography.monoLabel,
+                  style: typo.monoLabel,
                 ),
               ],
             ),
@@ -95,7 +97,7 @@ class JournalCard extends StatelessWidget {
             // Title
             Text(
               entry.title,
-              style: AppTypography.titleLarge.copyWith(
+              style: typo.titleLarge.copyWith(
                 fontWeight: FontWeight.w700,
               ),
               maxLines: 2,
@@ -107,7 +109,7 @@ class JournalCard extends StatelessWidget {
               const SizedBox(height: 6),
               Text(
                 entry.content.replaceAll('\n', ' '),
-                style: AppTypography.bodyMedium,
+                style: typo.bodyMedium,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -122,8 +124,8 @@ class JournalCard extends StatelessWidget {
                 children: entry.tags.take(3).map((tag) {
                   return Text(
                     '#$tag',
-                    style: AppTypography.monoLabel.copyWith(
-                      color: AppColors.textMuted,
+                    style: typo.monoLabel.copyWith(
+                      color: colors.textMuted,
                       fontSize: 10,
                     ),
                   );
