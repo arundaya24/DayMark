@@ -1,6 +1,6 @@
 {
   "@@locale": "en",
-  "appTitle": "DAYMARK",
+  "appTitle": "Day Mark",
   "tagline": "Every day leaves a mark.",
   "taglineSubtitle": "Capture a reflection, insight, or achievement for today.",
   "dashboard": "Dashboard",
@@ -93,8 +93,8 @@
   "backupData": "Backup Data (Export JSON)",
   "backupSubtitle": "Export journals and activity history to file",
   "restoreData": "Restore Data (Import JSON)",
-  "restoreSubtitle": "Restore entries from previous DAYMARK backup",
-  "about": "ABOUT DAYMARK",
+  "restoreSubtitle": "Restore entries from previous Day Mark backup",
+  "about": "About Day Mark",
   "version": "Version",
   "offlinePromise": "100% Offline & Privacy First",
   "offlinePromiseDesc": "Your data is stored locally on your device. No tracking, no account required.",

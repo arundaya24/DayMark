@@ -1,6 +1,6 @@
 {
   "@@locale": "id",
-  "appTitle": "DAYMARK",
+  "appTitle": "Day Mark",
   "tagline": "Setiap hari meninggalkan jejak.",
   "taglineSubtitle": "Abadikan refleksi, wawasan, atau pencapaian hari ini.",
   "dashboard": "Dasbor",
@@ -93,8 +93,8 @@
   "backupData": "Cadangkan Data (Ekspor JSON)",
   "backupSubtitle": "Ekspor jurnal dan riwayat aktivitas ke berkas",
   "restoreData": "Pulihkan Data (Impor JSON)",
-  "restoreSubtitle": "Pulihkan entri dari cadangan DAYMARK sebelumnya",
-  "about": "TENTANG DAYMARK",
+  "restoreSubtitle": "Pulihkan entri dari cadangan Day Mark sebelumnya",
+  "about": "Tentang Day Mark",
   "version": "Versi",
   "offlinePromise": "100% Offline & Mengutamakan Privasi",
   "offlinePromiseDesc": "Data Anda disimpan secara lokal di perangkat Anda. Tidak ada pelacakan, tidak perlu akun.",

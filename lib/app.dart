@@ -28,7 +28,7 @@ class DayMarkApp extends ConsumerWidget {
     }
 
     return MaterialApp(
-      title: 'DAYMARK',
+      title: 'Day Mark',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,

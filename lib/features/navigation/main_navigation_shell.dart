@@ -77,7 +77,7 @@ class _MainNavigationShellState extends ConsumerState<MainNavigationShell> {
                     child: const Icon(Icons.lock_rounded, size: 36, color: AppColors.primary),
                   ),
                   const SizedBox(height: 20),
-                  Text('DAYMARK', style: typo.displayMedium),
+                  Text(l10n.appTitle, style: typo.displayMedium),
                   const SizedBox(height: 6),
                   Text(l10n.enterPinPrompt, style: typo.bodySmall),
                   const SizedBox(height: 28),

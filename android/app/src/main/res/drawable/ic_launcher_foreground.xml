@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Elevated Calendar Card Container -->
+    <path
+        android:fillColor="#111827"
+        android:strokeColor="#253145"
+        android:strokeWidth="1"
+        android:pathData="M 30,22 L 78,22 A 10,10 0 0 1 88,32 L 88,76 A 10,10 0 0 1 78,86 L 30,86 A 10,10 0 0 1 20,76 L 20,32 A 10,10 0 0 1 30,22 Z" />
+
+    <!-- Calendar Ring Notches (Emerald) -->
+    <path
+        android:strokeColor="#10B981"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:pathData="M 40,19 L 40,25" />
+    <path
+        android:strokeColor="#10B981"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:pathData="M 68,19 L 68,25" />
+
+    <!-- 3x3 Contribution Matrix forming "D" and Center Emerald "Mark" -->
+    <!-- Ghost Cells (Top-Right and Bottom-Right to complete matrix structure) -->
+    <path
+        android:fillColor="#172030"
+        android:strokeColor="#212C3F"
+        android:strokeWidth="0.5"
+        android:pathData="M 65,33.5 L 73,33.5 A 2.5,2.5 0 0 1 75.5,36 L 75.5,42.5 A 2.5,2.5 0 0 1 73,45 L 65,45 A 2.5,2.5 0 0 1 62.5,42.5 L 62.5,36 A 2.5,2.5 0 0 1 65,33.5 Z" />
+    <path
+        android:fillColor="#172030"
+        android:strokeColor="#212C3F"
+        android:strokeWidth="0.5"
+        android:pathData="M 65,63.5 L 73,63.5 A 2.5,2.5 0 0 1 75.5,66 L 75.5,72.5 A 2.5,2.5 0 0 1 73,75 L 65,75 A 2.5,2.5 0 0 1 62.5,72.5 L 62.5,66 A 2.5,2.5 0 0 1 65,63.5 Z" />
+
+    <!-- "D" Monogram Contour Tiles (Slate-White #E2E8F0) -->
+    <!-- (0,0) Top-Left Spine -->
+    <path
+        android:fillColor="#E2E8F0"
+        android:strokeColor="#F8FAFC"
+        android:strokeWidth="0.6"
+        android:pathData="M 35,33.5 L 43,33.5 A 2.5,2.5 0 0 1 45.5,36 L 45.5,42.5 A 2.5,2.5 0 0 1 43,45 L 35,45 A 2.5,2.5 0 0 1 32.5,42.5 L 32.5,36 A 2.5,2.5 0 0 1 35,33.5 Z" />
+    <!-- (1,0) Top-Center -->
+    <path
+        android:fillColor="#E2E8F0"
+        android:strokeColor="#F8FAFC"
+        android:strokeWidth="0.6"
+        android:pathData="M 50,33.5 L 58,33.5 A 2.5,2.5 0 0 1 60.5,36 L 60.5,42.5 A 2.5,2.5 0 0 1 58,45 L 50,45 A 2.5,2.5 0 0 1 47.5,42.5 L 47.5,36 A 2.5,2.5 0 0 1 50,33.5 Z" />
+    <!-- (0,1) Mid-Left Spine -->
+    <path
+        android:fillColor="#E2E8F0"
+        android:strokeColor="#F8FAFC"
+        android:strokeWidth="0.6"
+        android:pathData="M 35,48.5 L 43,48.5 A 2.5,2.5 0 0 1 45.5,51 L 45.5,57.5 A 2.5,2.5 0 0 1 43,60 L 35,60 A 2.5,2.5 0 0 1 32.5,57.5 L 32.5,51 A 2.5,2.5 0 0 1 35,48.5 Z" />
+    <!-- (2,1) Mid-Right Curve -->
+    <path
+        android:fillColor="#E2E8F0"
+        android:strokeColor="#F8FAFC"
+        android:strokeWidth="0.6"
+        android:pathData="M 65,48.5 L 73,48.5 A 2.5,2.5 0 0 1 75.5,51 L 75.5,57.5 A 2.5,2.5 0 0 1 73,60 L 65,60 A 2.5,2.5 0 0 1 62.5,57.5 L 62.5,51 A 2.5,2.5 0 0 1 65,48.5 Z" />
+    <!-- (0,2) Bottom-Left Spine -->
+    <path
+        android:fillColor="#E2E8F0"
+        android:strokeColor="#F8FAFC"
+        android:strokeWidth="0.6"
+        android:pathData="M 35,63.5 L 43,63.5 A 2.5,2.5 0 0 1 45.5,66 L 45.5,72.5 A 2.5,2.5 0 0 1 43,75 L 35,75 A 2.5,2.5 0 0 1 32.5,72.5 L 32.5,66 A 2.5,2.5 0 0 1 35,63.5 Z" />
+    <!-- (1,2) Bottom-Center -->
+    <path
+        android:fillColor="#E2E8F0"
+        android:strokeColor="#F8FAFC"
+        android:strokeWidth="0.6"
+        android:pathData="M 50,63.5 L 58,63.5 A 2.5,2.5 0 0 1 60.5,66 L 60.5,72.5 A 2.5,2.5 0 0 1 58,75 L 50,75 A 2.5,2.5 0 0 1 47.5,72.5 L 47.5,66 A 2.5,2.5 0 0 1 50,63.5 Z" />
+
+    <!-- (1,1) CENTER DAY MARK (Emerald #10B981 with Mint Border and Center Glow Dot) -->
+    <path
+        android:fillColor="#10B981"
+        android:strokeColor="#34D399"
+        android:strokeWidth="0.8"
+        android:pathData="M 50,48.5 L 58,48.5 A 2.5,2.5 0 0 1 60.5,51 L 60.5,57.5 A 2.5,2.5 0 0 1 58,60 L 50,60 A 2.5,2.5 0 0 1 47.5,57.5 L 47.5,51 A 2.5,2.5 0 0 1 50,48.5 Z" />
+
+    <!-- Center Highlight Dot inside Day Mark -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M 54,52.5 A 1.5,1.5 0 1 1 53.99,52.5 Z" />
+
+</vector>

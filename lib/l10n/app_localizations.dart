@@ -30,7 +30,7 @@ class AppLocalizations {
   String get settings => isIndonesian ? 'Pengaturan' : 'Settings';
 
   // Header & Greetings
-  String get appTitle => 'DAYMARK';
+  String get appTitle => 'Day Mark';
   String get tagline => isIndonesian ? 'Setiap hari meninggalkan jejak.' : 'Every day leaves a mark.';
   String get taglineSubtitle => isIndonesian
       ? 'Abadikan refleksi, wawasan, atau pencapaian hari ini.'
@@ -226,9 +226,9 @@ class AppLocalizations {
       : 'Export journals and activity history to file';
   String get restoreData => isIndonesian ? 'Pulihkan Data (Impor JSON)' : 'Restore Data (Import JSON)';
   String get restoreSubtitle => isIndonesian
-      ? 'Pulihkan entri dari cadangan DAYMARK sebelumnya'
-      : 'Restore entries from previous DAYMARK backup';
-  String get about => isIndonesian ? 'TENTANG DAYMARK' : 'ABOUT DAYMARK';
+      ? 'Pulihkan entri dari cadangan Day Mark sebelumnya'
+      : 'Restore entries from previous Day Mark backup';
+  String get about => isIndonesian ? 'Tentang Day Mark' : 'About Day Mark';
   String get version => isIndonesian ? 'Versi' : 'Version';
   String get offlinePromise => isIndonesian ? '100% Offline & Mengutamakan Privasi' : '100% Offline & Privacy First';
   String get offlinePromiseDesc => isIndonesian
