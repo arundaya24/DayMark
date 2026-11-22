@@ -50,23 +50,30 @@ class DashboardScreen extends ConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '$greeting, ${settings.userName}',
-                          style: typo.displayMedium.copyWith(fontSize: 22),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          AppDateUtils.formatDisplay(now, 'EEEE, dd MMMM yyyy'),
-                          style: typo.monoLabel.copyWith(
-                            color: colors.textMuted,
-                            fontSize: 12,
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '$greeting, ${settings.userName}',
+                            style: typo.displayMedium.copyWith(fontSize: 22),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                        ),
-                      ],
+                          const SizedBox(height: 4),
+                          Text(
+                            AppDateUtils.formatDisplay(now, 'EEEE, dd MMMM yyyy'),
+                            style: typo.monoLabel.copyWith(
+                              color: colors.textMuted,
+                              fontSize: 12,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
                     ),
+                    const SizedBox(width: 12),
                     streakStatsAsync.when(
                       data: (stats) => StreakBadge(currentStreak: stats.currentStreak),
                       loading: () => const SizedBox.shrink(),
@@ -259,13 +266,23 @@ class DashboardScreen extends ConsumerWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  const Icon(Icons.insights_rounded, color: AppColors.primary, size: 18),
-                  const SizedBox(width: 8),
-                  Text('Activity Breakdown', style: typo.titleLarge),
-                ],
+              Expanded(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.insights_rounded, color: AppColors.primary, size: 18),
+                    const SizedBox(width: 8),
+                    Flexible(
+                      child: Text(
+                        'Activity Breakdown',
+                        style: typo.titleLarge,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
               ),
+              const SizedBox(width: 8),
               Text(
                 'This Month: ${stats.thisMonthContributions}',
                 style: typo.monoLabel.copyWith(color: AppColors.primary),

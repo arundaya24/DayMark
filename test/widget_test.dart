@@ -1,6 +1,9 @@
+import 'package:daymark/core/constants/app_theme.dart';
 import 'package:daymark/core/utils/date_utils.dart';
 import 'package:daymark/core/utils/streak_calculator.dart';
+import 'package:daymark/features/contribution/presentation/widgets/streak_badge.dart';
 import 'package:daymark/features/journal/domain/entities/journal_entry.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -96,6 +99,56 @@ void main() {
       expect(updated.title, 'Updated Title');
       expect(updated.content, 'Initial Content');
       expect(updated.isPinned, true);
+    });
+  });
+
+  group('DAYMARK Dashboard Header Layout Overflow Tests', () {
+    testWidgets('Header row with long user name does not overflow on narrow screen', (tester) async {
+      tester.view.physicalSize = const Size(320, 640);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.darkTheme,
+          home: Scaffold(
+            body: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                        Text(
+                          'Good afternoon, Kalingga Kusuma Wardhana',
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        SizedBox(height: 4),
+                        Text(
+                          'Sunday, 22 November 2026',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  const StreakBadge(currentStreak: 14),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+      expect(tester.takeException(), isNull);
+      expect(find.byType(StreakBadge), findsOneWidget);
     });
   });
 }

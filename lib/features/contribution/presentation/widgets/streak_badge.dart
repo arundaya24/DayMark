@@ -145,7 +145,15 @@ class StatsGrid extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(title, style: typo.bodySmall),
+              Expanded(
+                child: Text(
+                  title,
+                  style: typo.bodySmall,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              const SizedBox(width: 4),
               Icon(icon, color: iconColor, size: 20),
             ],
           ),
@@ -155,6 +163,8 @@ class StatsGrid extends StatelessWidget {
             style: typo.headlineMedium.copyWith(
               fontWeight: FontWeight.w700,
             ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),
