@@ -210,7 +210,7 @@ class PdfExportService {
       ),
       padding: const pw.EdgeInsets.only(left: 10, top: 2, bottom: 2),
       child: pw.Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: pw.CrossAxisAlignment.start,
         children: [
           pw.Text(
             title,

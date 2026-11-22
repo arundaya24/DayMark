@@ -115,7 +115,7 @@ final journalListProvider = StateNotifierProvider<JournalListNotifier, AsyncValu
   final notifier = JournalListNotifier(repo, ref);
   
   // Reload whenever filter state changes
-  ref.listen<JournalFilterState>(journalFilterProvider, (_, __) {
+  ref.listen<JournalFilterState>(journalFilterProvider, (_, _) {
     notifier.loadJournals();
   });
 

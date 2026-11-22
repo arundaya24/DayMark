@@ -244,7 +244,7 @@ class ContributionHeatmap extends StatelessWidget {
                   child: ListView.separated(
                     shrinkWrap: true,
                     itemCount: entries.length,
-                    separatorBuilder: (_, __) => const Divider(color: AppColors.borderSubtle),
+                    separatorBuilder: (_, _) => const Divider(color: AppColors.borderSubtle),
                     itemBuilder: (ctx, index) {
                       final item = entries[index];
                       return ListTile(
