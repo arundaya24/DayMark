@@ -1,0 +1,138 @@
+import 'package:flutter/material.dart';
+import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_typography.dart';
+import '../../../../core/constants/app_categories.dart';
+import '../../../../core/utils/date_utils.dart';
+import '../../domain/entities/journal_entry.dart';
+
+class JournalCard extends StatelessWidget {
+  final JournalEntry entry;
+  final VoidCallback onTap;
+  final VoidCallback? onDelete;
+  final bool hidePreview;
+
+  const JournalCard({
+    super.key,
+    required this.entry,
+    required this.onTap,
+    this.onDelete,
+    this.hidePreview = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final category = AppCategories.getById(entry.category);
+
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: entry.isPinned ? AppColors.primary.withOpacity(0.4) : AppColors.border,
+            width: entry.isPinned ? 1.5 : 1,
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Top Row: Category Pill, Date & Pinned icon
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: category.color.withOpacity(0.15),
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(category.icon, size: 12, color: category.color),
+                      const SizedBox(width: 4),
+                      Text(
+                        category.name,
+                        style: AppTypography.monoLabel.copyWith(
+                          color: category.color,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 8),
+                if (entry.mood != null && entry.mood!.isNotEmpty) ...[
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: AppColors.surfaceHighlight,
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: Text(
+                      entry.mood!,
+                      style: AppTypography.monoLabel.copyWith(color: AppColors.textSecondary),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                ],
+                const Spacer(),
+                if (entry.isPinned)
+                  const Padding(
+                    padding: EdgeInsets.only(right: 6),
+                    child: Icon(Icons.push_pin_rounded, size: 16, color: AppColors.primary),
+                  ),
+                Text(
+                  AppDateUtils.formatRelative(entry.createdAt),
+                  style: AppTypography.monoLabel,
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+
+            // Title
+            Text(
+              entry.title,
+              style: AppTypography.titleLarge.copyWith(
+                fontWeight: FontWeight.w700,
+              ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+
+            // Content preview (hidden if user turned on hidePreview)
+            if (!hidePreview && entry.content.isNotEmpty) ...[
+              const SizedBox(height: 6),
+              Text(
+                entry.content.replaceAll('\n', ' '),
+                style: AppTypography.bodyMedium,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+
+            // Tags (if any)
+            if (entry.tags.isNotEmpty) ...[
+              const SizedBox(height: 10),
+              Wrap(
+                spacing: 6,
+                runSpacing: 4,
+                children: entry.tags.take(3).map((tag) {
+                  return Text(
+                    '#$tag',
+                    style: AppTypography.monoLabel.copyWith(
+                      color: AppColors.textMuted,
+                      fontSize: 10,
+                    ),
+                  );
+                }).toList(),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
