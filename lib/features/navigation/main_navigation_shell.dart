@@ -13,7 +13,8 @@ class MainNavigationShell extends ConsumerStatefulWidget {
   const MainNavigationShell({super.key});
 
   @override
-  ConsumerState<MainNavigationShell> createState() => _MainNavigationShellState();
+  ConsumerState<MainNavigationShell> createState() =>
+      _MainNavigationShellState();
 }
 
 class _MainNavigationShellState extends ConsumerState<MainNavigationShell> {
@@ -72,9 +73,15 @@ class _MainNavigationShellState extends ConsumerState<MainNavigationShell> {
                     decoration: BoxDecoration(
                       color: colors.surfaceElevated,
                       shape: BoxShape.circle,
-                      border: Border.all(color: AppColors.primary.withValues(alpha: 0.4)),
+                      border: Border.all(
+                        color: AppColors.primary.withValues(alpha: 0.4),
+                      ),
                     ),
-                    child: const Icon(Icons.lock_rounded, size: 36, color: AppColors.primary),
+                    child: const Icon(
+                      Icons.lock_rounded,
+                      size: 36,
+                      color: AppColors.primary,
+                    ),
                   ),
                   const SizedBox(height: 20),
                   Text(l10n.appTitle, style: typo.displayMedium),
@@ -89,18 +96,26 @@ class _MainNavigationShellState extends ConsumerState<MainNavigationShell> {
                       obscureText: true,
                       textAlign: TextAlign.center,
                       maxLength: 6,
-                      style: typo.displayLarge.copyWith(letterSpacing: 8, fontSize: 28),
+                      style: typo.displayLarge.copyWith(
+                        letterSpacing: 8,
+                        fontSize: 28,
+                      ),
                       decoration: InputDecoration(
                         counterText: '',
                         hintText: '••••',
-                        hintStyle: typo.displayMedium.copyWith(color: colors.textMuted),
+                        hintStyle: typo.displayMedium.copyWith(
+                          color: colors.textMuted,
+                        ),
                       ),
                       onSubmitted: (_) => _verifyPin(settings.pinCode!, l10n),
                     ),
                   ),
                   if (_pinError != null) ...[
                     const SizedBox(height: 12),
-                    Text(_pinError!, style: typo.monoLabel.copyWith(color: AppColors.error)),
+                    Text(
+                      _pinError!,
+                      style: typo.monoLabel.copyWith(color: AppColors.error),
+                    ),
                   ],
                   const SizedBox(height: 24),
                   ElevatedButton(
@@ -108,10 +123,21 @@ class _MainNavigationShellState extends ConsumerState<MainNavigationShell> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
                       foregroundColor: Colors.black,
-                      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 40,
+                        vertical: 12,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
-                    child: Text(l10n.unlock, style: typo.titleMedium.copyWith(color: Colors.black, fontWeight: FontWeight.w700)),
+                    child: Text(
+                      l10n.unlock,
+                      style: typo.titleMedium.copyWith(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -123,10 +149,7 @@ class _MainNavigationShellState extends ConsumerState<MainNavigationShell> {
 
     return Scaffold(
       backgroundColor: colors.background,
-      body: IndexedStack(
-        index: _currentIndex,
-        children: _screens,
-      ),
+      body: IndexedStack(index: _currentIndex, children: _screens),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           border: Border(top: BorderSide(color: colors.border, width: 1)),
