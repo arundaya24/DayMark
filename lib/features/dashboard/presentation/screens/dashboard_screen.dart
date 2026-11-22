@@ -70,7 +70,7 @@ class DashboardScreen extends ConsumerWidget {
                     streakStatsAsync.when(
                       data: (stats) => StreakBadge(currentStreak: stats.currentStreak),
                       loading: () => const SizedBox.shrink(),
-                      error: (_, __) => const SizedBox.shrink(),
+                      error: (_, _) => const SizedBox.shrink(),
                     ),
                   ],
                 ),
@@ -158,7 +158,7 @@ class DashboardScreen extends ConsumerWidget {
                     repository: repository,
                   ),
                   loading: () => const SizedBox.shrink(),
-                  error: (_, __) => const SizedBox.shrink(),
+                  error: (_, _) => const SizedBox.shrink(),
                 ),
 
                 const SizedBox(height: 20),
@@ -167,7 +167,7 @@ class DashboardScreen extends ConsumerWidget {
                 streakStatsAsync.when(
                   data: (stats) => _buildMonthlyStatsCard(context, stats),
                   loading: () => const SizedBox.shrink(),
-                  error: (_, __) => const SizedBox.shrink(),
+                  error: (_, _) => const SizedBox.shrink(),
                 ),
 
                 const SizedBox(height: 24),

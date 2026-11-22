@@ -322,7 +322,7 @@ class _ContributionHeatmapState extends State<ContributionHeatmap> {
                   child: ListView.separated(
                     shrinkWrap: true,
                     itemCount: entries.length,
-                    separatorBuilder: (_, __) => Divider(color: colors.borderSubtle),
+                    separatorBuilder: (_, _) => Divider(color: colors.borderSubtle),
                     itemBuilder: (ctx, index) {
                       final item = entries[index];
                       return ListTile(
