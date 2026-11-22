@@ -15,6 +15,7 @@ class SettingsNotifier extends StateNotifier<AppSettings> {
           userBio: _prefs.getUserBio(),
           themeMode: _prefs.getThemeMode(),
           dateFormat: _prefs.getDateFormat(),
+          languageCode: _prefs.getLanguageCode(),
           pinEnabled: _prefs.isPinEnabled(),
           pinCode: _prefs.getPinCode(),
           hidePreview: _prefs.isHidePreview(),
@@ -37,6 +38,11 @@ class SettingsNotifier extends StateNotifier<AppSettings> {
   Future<void> setDateFormat(String format) async {
     await _prefs.setDateFormat(format);
     state = state.copyWith(dateFormat: format);
+  }
+
+  Future<void> setLanguage(String code) async {
+    await _prefs.setLanguageCode(code);
+    state = state.copyWith(languageCode: code);
   }
 
   Future<void> setPinLock({required bool enabled, String? pin}) async {

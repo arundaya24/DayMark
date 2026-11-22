@@ -1,5 +1,6 @@
 import 'package:daymark/core/constants/app_colors.dart';
 import 'package:daymark/core/constants/app_typography.dart';
+import 'package:daymark/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class ProfileEditDialog extends StatefulWidget {
@@ -38,33 +39,34 @@ class _ProfileEditDialogState extends State<ProfileEditDialog> {
   Widget build(BuildContext context) {
     final colors = context.colors;
     final typo = context.typo;
+    final l10n = context.l10n;
 
     return AlertDialog(
       backgroundColor: colors.surface,
-      title: Text('Edit Profile', style: typo.headlineMedium),
+      title: Text(l10n.editProfile, style: typo.headlineMedium),
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('NAME', style: typo.monoLabel),
+            Text(l10n.name.toUpperCase(), style: typo.monoLabel),
             const SizedBox(height: 6),
             TextField(
               controller: _nameController,
               style: typo.bodyMedium.copyWith(color: colors.textPrimary),
               decoration: InputDecoration(
-                hintText: 'Your name or moniker',
+                hintText: l10n.isIndonesian ? 'Nama atau panggilan Anda' : 'Your name or moniker',
                 hintStyle: typo.bodyMedium.copyWith(color: colors.textMuted),
               ),
             ),
             const SizedBox(height: 16),
-            Text('BIO / MOTTO', style: typo.monoLabel),
+            Text(l10n.bio.toUpperCase(), style: typo.monoLabel),
             const SizedBox(height: 6),
             TextField(
               controller: _bioController,
               style: typo.bodyMedium.copyWith(color: colors.textPrimary),
               decoration: InputDecoration(
-                hintText: 'e.g. Every day leaves a mark.',
+                hintText: 'e.g. ${l10n.tagline}',
                 hintStyle: typo.bodyMedium.copyWith(color: colors.textMuted),
               ),
               maxLines: 2,
@@ -75,7 +77,7 @@ class _ProfileEditDialogState extends State<ProfileEditDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: Text('Cancel', style: typo.labelMedium),
+          child: Text(l10n.cancel, style: typo.labelMedium),
         ),
         ElevatedButton(
           onPressed: () {
@@ -89,7 +91,7 @@ class _ProfileEditDialogState extends State<ProfileEditDialog> {
             backgroundColor: AppColors.primary,
             foregroundColor: Colors.black,
           ),
-          child: const Text('Save'),
+          child: Text(l10n.save, style: const TextStyle(color: Colors.black, fontWeight: FontWeight.w700)),
         ),
       ],
     );

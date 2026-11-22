@@ -2,6 +2,7 @@ import 'package:daymark/core/constants/app_colors.dart';
 import 'package:daymark/core/constants/app_typography.dart';
 import 'package:daymark/core/utils/date_utils.dart';
 import 'package:daymark/features/journal/domain/repositories/journal_repository.dart';
+import 'package:daymark/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -36,6 +37,7 @@ class _ContributionHeatmapState extends State<ContributionHeatmap> {
   Widget build(BuildContext context) {
     final colors = context.colors;
     final typo = context.typo;
+    final l10n = context.l10n;
     final today = AppDateUtils.toLocalDateOnly(DateTime.now());
 
     final currentWeekday = today.weekday; // 1 = Monday, 7 = Sunday
@@ -60,12 +62,13 @@ class _ContributionHeatmapState extends State<ContributionHeatmap> {
     }
 
     // Determine month labels for columns
+    final monthLocale = l10n.locale.languageCode;
     final Map<int, String> monthLabels = {};
     int? lastMonth;
     for (int i = 0; i < weeks.length; i++) {
       final firstDayOfWeek = weeks[i].first;
       if (lastMonth == null || firstDayOfWeek.month != lastMonth) {
-        monthLabels[i] = DateFormat('MMM').format(firstDayOfWeek);
+        monthLabels[i] = DateFormat('MMM', monthLocale).format(firstDayOfWeek);
         lastMonth = firstDayOfWeek.month;
       }
     }
@@ -90,7 +93,7 @@ class _ContributionHeatmapState extends State<ContributionHeatmap> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Activity Calendar',
+                l10n.activityCalendar,
                 style: typo.titleLarge.copyWith(fontWeight: FontWeight.w700),
               ),
               Container(
@@ -102,7 +105,7 @@ class _ContributionHeatmapState extends State<ContributionHeatmap> {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
-                  '${DateFormat('d MMM').format(selectedDay)}: $selectedCount mark${selectedCount == 1 ? '' : 's'}',
+                  '${DateFormat('d MMM', monthLocale).format(selectedDay)}: ${l10n.markCount(selectedCount)}',
                   style: typo.monoLabel.copyWith(
                     color: selectedCount > 0 ? AppColors.primary : colors.textMuted,
                     fontWeight: FontWeight.w600,
@@ -126,11 +129,11 @@ class _ContributionHeatmapState extends State<ContributionHeatmap> {
                   padding: const EdgeInsets.only(right: 8, top: 22),
                   child: Column(
                     children: [
-                      _buildWeekdayLabel('Mon', typo),
+                      _buildWeekdayLabel(l10n.isIndonesian ? 'Sen' : 'Mon', typo),
                       const SizedBox(height: 19),
-                      _buildWeekdayLabel('Wed', typo),
+                      _buildWeekdayLabel(l10n.isIndonesian ? 'Rab' : 'Wed', typo),
                       const SizedBox(height: 19),
-                      _buildWeekdayLabel('Fri', typo),
+                      _buildWeekdayLabel(l10n.isIndonesian ? 'Jum' : 'Fri', typo),
                     ],
                   ),
                 ),
@@ -212,12 +215,12 @@ class _ContributionHeatmapState extends State<ContributionHeatmap> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '${widget.contributionMap.length} active days recorded',
+                l10n.activeDaysRecorded(widget.contributionMap.length),
                 style: typo.bodySmall,
               ),
               Row(
                 children: [
-                  Text('Less', style: typo.monoLabel.copyWith(fontSize: 10)),
+                  Text(l10n.less, style: typo.monoLabel.copyWith(fontSize: 10)),
                   const SizedBox(width: 6),
                   _buildLegendBox(colors.heatLevel0, colors.border),
                   const SizedBox(width: 3),
@@ -229,7 +232,7 @@ class _ContributionHeatmapState extends State<ContributionHeatmap> {
                   const SizedBox(width: 3),
                   _buildLegendBox(colors.heatLevel4),
                   const SizedBox(width: 6),
-                  Text('More', style: typo.monoLabel.copyWith(fontSize: 10)),
+                  Text(l10n.more, style: typo.monoLabel.copyWith(fontSize: 10)),
                 ],
               ),
             ],
@@ -264,6 +267,7 @@ class _ContributionHeatmapState extends State<ContributionHeatmap> {
   void _showDayDetails(BuildContext context, DateTime day, int count) async {
     final colors = context.colors;
     final typo = context.typo;
+    final l10n = context.l10n;
     final entries = await widget.repository.getJournalsForDate(day);
     if (!context.mounted) return;
 
@@ -287,12 +291,12 @@ class _ContributionHeatmapState extends State<ContributionHeatmap> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        AppDateUtils.formatDisplay(day, 'EEEE, dd MMMM yyyy'),
+                        AppDateUtils.formatDisplay(day, 'EEEE, dd MMMM yyyy', l10n.locale.languageCode),
                         style: typo.titleLarge,
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        '$count mark${count == 1 ? '' : 's'} recorded',
+                        l10n.isIndonesian ? '$count catatan tercatat' : '$count mark${count == 1 ? '' : 's'} recorded',
                         style: typo.bodyMedium.copyWith(
                           color: count > 0 ? AppColors.primary : colors.textMuted,
                           fontWeight: FontWeight.w600,
@@ -312,7 +316,7 @@ class _ContributionHeatmapState extends State<ContributionHeatmap> {
                   padding: const EdgeInsets.symmetric(vertical: 20),
                   child: Center(
                     child: Text(
-                      'No written reflections on this day.',
+                      l10n.isIndonesian ? 'Tidak ada catatan pada hari ini.' : 'No written reflections on this day.',
                       style: typo.bodyMedium,
                     ),
                   ),

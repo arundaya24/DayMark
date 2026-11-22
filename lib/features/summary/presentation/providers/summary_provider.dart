@@ -75,6 +75,7 @@ class SummaryNotifier extends StateNotifier<SummaryState> {
         entries: entries,
         startDate: state.startDate,
         endDate: state.endDate,
+        languageCode: settings.languageCode,
       );
 
       state = state.copyWith(isLoading: false, summary: result);

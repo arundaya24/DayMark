@@ -4,6 +4,7 @@ import 'package:daymark/features/journal/presentation/providers/journal_provider
 import 'package:daymark/features/journal/presentation/widgets/journal_card.dart';
 import 'package:daymark/features/journal/presentation/widgets/search_filter_bar.dart';
 import 'package:daymark/features/settings/presentation/providers/settings_provider.dart';
+import 'package:daymark/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'journal_detail_screen.dart';
@@ -16,6 +17,7 @@ class JournalListScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final colors = context.colors;
     final typo = context.typo;
+    final l10n = context.l10n;
     final filterState = ref.watch(journalFilterProvider);
     final filterNotifier = ref.read(journalFilterProvider.notifier);
     final journalListAsync = ref.watch(journalListProvider);
@@ -27,8 +29,8 @@ class JournalListScreen extends ConsumerWidget {
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Timeline', style: typo.headlineLarge),
-            Text('Every day leaves a mark.', style: typo.bodySmall),
+            Text(l10n.timeline, style: typo.headlineLarge),
+            Text(l10n.tagline, style: typo.bodySmall),
           ],
         ),
       ),
@@ -37,7 +39,7 @@ class JournalListScreen extends ConsumerWidget {
         foregroundColor: Colors.black,
         elevation: 4,
         icon: const Icon(Icons.edit_outlined),
-        label: Text('New Entry', style: typo.titleMedium.copyWith(color: Colors.black, fontWeight: FontWeight.w700)),
+        label: Text(l10n.newEntry, style: typo.titleMedium.copyWith(color: Colors.black, fontWeight: FontWeight.w700)),
         onPressed: () {
           Navigator.push(
             context,
@@ -69,10 +71,14 @@ class JournalListScreen extends ConsumerWidget {
                     child: CircularProgressIndicator(color: AppColors.primary),
                   ),
                   error: (err, _) => Center(
-                    child: Text('Error loading journals: $err', style: typo.bodyMedium),
+                    child: Text('Error: $err', style: typo.bodyMedium),
                   ),
                   data: (entries) {
                     if (entries.isEmpty) {
+                      final isFiltered = filterState.searchQuery.isNotEmpty ||
+                          filterState.selectedCategory != 'All' ||
+                          filterState.startDate != null;
+
                       return Center(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -91,12 +97,16 @@ class JournalListScreen extends ConsumerWidget {
                               ),
                             ),
                             const SizedBox(height: 16),
-                            Text('No journals found', style: typo.titleLarge),
+                            Text(
+                              isFiltered ? l10n.noJournalsMatch : l10n.noJournalsYet,
+                              style: typo.titleLarge,
+                              textAlign: TextAlign.center,
+                            ),
                             const SizedBox(height: 6),
                             Text(
-                              filterState.searchQuery.isNotEmpty || filterState.selectedCategory != 'All' || filterState.startDate != null
-                                  ? 'Try adjusting your filters or search terms.'
-                                  : 'Begin documenting your thoughts and journey today.',
+                              isFiltered
+                                  ? (l10n.isIndonesian ? 'Coba sesuaikan filter atau kata kunci pencarian Anda.' : 'Try adjusting your filters or search terms.')
+                                  : l10n.startWritingPrompt,
                               style: typo.bodyMedium,
                               textAlign: TextAlign.center,
                             ),

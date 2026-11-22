@@ -3,6 +3,7 @@ import 'package:daymark/core/constants/app_typography.dart';
 import 'package:daymark/core/services/backup/backup_service.dart';
 import 'package:daymark/features/journal/presentation/providers/journal_provider.dart';
 import 'package:daymark/features/settings/presentation/providers/settings_provider.dart';
+import 'package:daymark/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'ai_config_dialog.dart';
@@ -16,6 +17,7 @@ class SettingsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final colors = context.colors;
     final typo = context.typo;
+    final l10n = context.l10n;
     final settings = ref.watch(settingsProvider);
     final settingsNotifier = ref.read(settingsProvider.notifier);
     final repository = ref.watch(journalRepositoryProvider);
@@ -27,8 +29,8 @@ class SettingsScreen extends ConsumerWidget {
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Settings', style: typo.headlineLarge),
-            Text('Preferences & System Config', style: typo.bodySmall),
+            Text(l10n.settings, style: typo.headlineLarge),
+            Text(l10n.preferencesAndConfig, style: typo.bodySmall),
           ],
         ),
       ),
@@ -92,19 +94,31 @@ class SettingsScreen extends ConsumerWidget {
 
             const SizedBox(height: 24),
 
+            // Language Section
+            _buildSectionHeader(l10n.language, typo),
+            _buildSettingsTile(
+              context: context,
+              icon: Icons.language_rounded,
+              title: l10n.appLanguage,
+              subtitle: settings.languageCode == 'id' ? l10n.indonesian : l10n.english,
+              onTap: () => _showLanguagePicker(context, ref, settings.languageCode),
+            ),
+
+            const SizedBox(height: 20),
+
             // Appearance & Theme Section
-            _buildSectionHeader('APPEARANCE', typo),
+            _buildSectionHeader(l10n.appearance, typo),
             _buildSettingsTile(
               context: context,
               icon: Icons.dark_mode_outlined,
-              title: 'Theme Preference',
-              subtitle: 'Current: ${settings.themeMode.toUpperCase()} mode',
+              title: l10n.themePreference,
+              subtitle: l10n.themeModeText(settings.themeMode),
               onTap: () => _showThemePicker(context, ref, settings.themeMode),
             ),
             _buildSettingsTile(
               context: context,
               icon: Icons.calendar_today_outlined,
-              title: 'Date Format',
+              title: l10n.dateFormat,
               subtitle: settings.dateFormat,
               onTap: () => _showDateFormatPicker(context, ref, settings.dateFormat),
             ),
@@ -112,7 +126,7 @@ class SettingsScreen extends ConsumerWidget {
             const SizedBox(height: 20),
 
             // Privacy & Security Section
-            _buildSectionHeader('PRIVACY & SECURITY', typo),
+            _buildSectionHeader(l10n.privacyAndSecurity, typo),
             Container(
               margin: const EdgeInsets.only(bottom: 8),
               decoration: BoxDecoration(
@@ -123,8 +137,8 @@ class SettingsScreen extends ConsumerWidget {
               child: SwitchListTile(
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                 secondary: Icon(Icons.visibility_off_outlined, color: colors.textSecondary),
-                title: Text('Hide Journal Previews', style: typo.titleMedium),
-                subtitle: Text('Mask journal content previews in timeline', style: typo.bodySmall),
+                title: Text(l10n.hidePreviews, style: typo.titleMedium),
+                subtitle: Text(l10n.hidePreviewsSubtitle, style: typo.bodySmall),
                 value: settings.hidePreview,
                 activeThumbColor: AppColors.primary,
                 onChanged: (val) => settingsNotifier.setHidePreview(val),
@@ -133,8 +147,8 @@ class SettingsScreen extends ConsumerWidget {
             _buildSettingsTile(
               context: context,
               icon: Icons.lock_outline_rounded,
-              title: 'App PIN Security Lock',
-              subtitle: settings.pinEnabled ? 'PIN Lock Enabled' : 'Disabled (Open Access)',
+              title: l10n.pinSecurity,
+              subtitle: settings.pinEnabled ? l10n.pinEnabled : l10n.pinDisabled,
               trailing: Switch(
                 value: settings.pinEnabled,
                 activeThumbColor: AppColors.primary,
@@ -157,7 +171,7 @@ class SettingsScreen extends ConsumerWidget {
                     } else if (verifiedPin != null) {
                       if (context.mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Incorrect PIN'), backgroundColor: AppColors.error),
+                          SnackBar(content: Text(l10n.incorrectPin), backgroundColor: AppColors.error),
                         );
                       }
                     }
@@ -169,14 +183,14 @@ class SettingsScreen extends ConsumerWidget {
             const SizedBox(height: 20),
 
             // AI Service Configuration
-            _buildSectionHeader('AI & SUMMARY PROVIDER', typo),
+            _buildSectionHeader(l10n.aiProvider, typo),
             _buildSettingsTile(
               context: context,
               icon: Icons.auto_awesome_rounded,
-              title: 'Summary Engine',
+              title: l10n.summaryEngine,
               subtitle: settings.aiProvider == 'gemini'
-                  ? 'Cloud: Google Gemini (${settings.geminiModel})'
-                  : 'Offline: Local Smart Heuristic Engine',
+                  ? l10n.engineCloud(settings.geminiModel)
+                  : l10n.engineOffline,
               onTap: () async {
                 final res = await showDialog<Map<String, String>>(
                   context: context,
@@ -199,12 +213,12 @@ class SettingsScreen extends ConsumerWidget {
             const SizedBox(height: 20),
 
             // Data & Storage (Backup & Restore)
-            _buildSectionHeader('DATA & STORAGE', typo),
+            _buildSectionHeader(l10n.dataAndStorage, typo),
             _buildSettingsTile(
               context: context,
               icon: Icons.file_upload_outlined,
-              title: 'Backup Data (Export JSON)',
-              subtitle: 'Export journals and activity history to file',
+              title: l10n.backupData,
+              subtitle: l10n.backupSubtitle,
               onTap: () async {
                 try {
                   final path = await backupService.exportBackup();
@@ -228,8 +242,8 @@ class SettingsScreen extends ConsumerWidget {
             _buildSettingsTile(
               context: context,
               icon: Icons.file_download_outlined,
-              title: 'Restore Data (Import JSON)',
-              subtitle: 'Restore entries from previous DAYMARK backup',
+              title: l10n.restoreData,
+              subtitle: l10n.restoreSubtitle,
               onTap: () async {
                 try {
                   final count = await backupService.importBackup();
@@ -260,9 +274,9 @@ class SettingsScreen extends ConsumerWidget {
                 children: [
                   Text('DAYMARK', style: typo.monoLabel.copyWith(fontWeight: FontWeight.w700, color: AppColors.primary)),
                   const SizedBox(height: 4),
-                  Text('"Every day leaves a mark."', style: typo.bodySmall),
+                  Text('"${l10n.tagline}"', style: typo.bodySmall),
                   const SizedBox(height: 2),
-                  Text('Version 1.0.0', style: typo.monoLabel.copyWith(fontSize: 10)),
+                  Text('${l10n.version} 1.0.0', style: typo.monoLabel.copyWith(fontSize: 10)),
                 ],
               ),
             ),
@@ -308,9 +322,10 @@ class SettingsScreen extends ConsumerWidget {
     );
   }
 
-  void _showThemePicker(BuildContext context, WidgetRef ref, String current) {
+  void _showLanguagePicker(BuildContext context, WidgetRef ref, String current) {
     final colors = context.colors;
     final typo = context.typo;
+    final l10n = context.l10n;
 
     showModalBottomSheet(
       context: context,
@@ -322,10 +337,54 @@ class SettingsScreen extends ConsumerWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('Select Theme Mode', style: typo.titleLarge),
+              Text(l10n.selectLanguage, style: typo.titleLarge),
               const SizedBox(height: 16),
               ListTile(
-                title: Text('Dark Mode (Primary default)', style: typo.bodyLarge),
+                title: Text(l10n.indonesian, style: typo.bodyLarge),
+                subtitle: const Text('Bahasa Indonesia (Default)'),
+                leading: const Icon(Icons.language_rounded, color: AppColors.primary),
+                trailing: current == 'id' ? const Icon(Icons.check, color: AppColors.primary) : null,
+                onTap: () {
+                  ref.read(settingsProvider.notifier).setLanguage('id');
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                title: Text(l10n.english, style: typo.bodyLarge),
+                subtitle: const Text('English'),
+                leading: Icon(Icons.language_rounded, color: colors.textSecondary),
+                trailing: current == 'en' ? const Icon(Icons.check, color: AppColors.primary) : null,
+                onTap: () {
+                  ref.read(settingsProvider.notifier).setLanguage('en');
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _showThemePicker(BuildContext context, WidgetRef ref, String current) {
+    final colors = context.colors;
+    final typo = context.typo;
+    final l10n = context.l10n;
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: colors.surface,
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      builder: (_) {
+        return Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(l10n.themePreference, style: typo.titleLarge),
+              const SizedBox(height: 16),
+              ListTile(
+                title: Text(l10n.themeModeText('dark'), style: typo.bodyLarge),
                 leading: const Icon(Icons.dark_mode_rounded, color: AppColors.primary),
                 trailing: current == 'dark' ? const Icon(Icons.check, color: AppColors.primary) : null,
                 onTap: () {
@@ -334,7 +393,7 @@ class SettingsScreen extends ConsumerWidget {
                 },
               ),
               ListTile(
-                title: Text('Light Mode', style: typo.bodyLarge),
+                title: Text(l10n.themeModeText('light'), style: typo.bodyLarge),
                 leading: Icon(Icons.light_mode_rounded, color: colors.textSecondary),
                 trailing: current == 'light' ? const Icon(Icons.check, color: AppColors.primary) : null,
                 onTap: () {
@@ -343,7 +402,7 @@ class SettingsScreen extends ConsumerWidget {
                 },
               ),
               ListTile(
-                title: Text('System Default', style: typo.bodyLarge),
+                title: Text(l10n.themeModeText('system'), style: typo.bodyLarge),
                 leading: Icon(Icons.brightness_auto_rounded, color: colors.textSecondary),
                 trailing: current == 'system' ? const Icon(Icons.check, color: AppColors.primary) : null,
                 onTap: () {
@@ -361,6 +420,7 @@ class SettingsScreen extends ConsumerWidget {
   void _showDateFormatPicker(BuildContext context, WidgetRef ref, String current) {
     final colors = context.colors;
     final typo = context.typo;
+    final l10n = context.l10n;
 
     final formats = [
       'dd MMM yyyy', // 22 Nov 2026
@@ -379,7 +439,7 @@ class SettingsScreen extends ConsumerWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('Select Date Format', style: typo.titleLarge),
+              Text(l10n.dateFormat, style: typo.titleLarge),
               const SizedBox(height: 16),
               ...formats.map((fmt) {
                 return ListTile(

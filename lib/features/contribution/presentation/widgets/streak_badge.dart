@@ -1,6 +1,7 @@
 import 'package:daymark/core/constants/app_colors.dart';
 import 'package:daymark/core/constants/app_typography.dart';
 import 'package:daymark/core/utils/streak_calculator.dart';
+import 'package:daymark/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class StreakBadge extends StatelessWidget {
@@ -17,6 +18,7 @@ class StreakBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = context.colors;
     final typo = context.typo;
+    final l10n = context.l10n;
     final bool hasStreak = currentStreak > 0;
 
     return GestureDetector(
@@ -49,7 +51,7 @@ class StreakBadge extends StatelessWidget {
             ),
             const SizedBox(width: 4),
             Text(
-              'day streak',
+              l10n.dayStreak,
               style: typo.labelMedium.copyWith(
                 color: hasStreak ? AppColors.accentGold.withValues(alpha: 0.9) : colors.textMuted,
                 fontSize: 11,
@@ -69,6 +71,8 @@ class StatsGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return Column(
       children: [
         Row(
@@ -76,8 +80,8 @@ class StatsGrid extends StatelessWidget {
             Expanded(
               child: _buildStatCard(
                 context: context,
-                title: 'Current Streak',
-                value: '${stats.currentStreak} Days',
+                title: l10n.currentStreak,
+                value: '${stats.currentStreak} ${l10n.days}',
                 icon: Icons.local_fire_department_rounded,
                 iconColor: AppColors.accentGold,
               ),
@@ -86,8 +90,8 @@ class StatsGrid extends StatelessWidget {
             Expanded(
               child: _buildStatCard(
                 context: context,
-                title: 'Longest Streak',
-                value: '${stats.longestStreak} Days',
+                title: l10n.longestStreak,
+                value: '${stats.longestStreak} ${l10n.days}',
                 icon: Icons.emoji_events_rounded,
                 iconColor: AppColors.primaryLight,
               ),
@@ -100,7 +104,7 @@ class StatsGrid extends StatelessWidget {
             Expanded(
               child: _buildStatCard(
                 context: context,
-                title: 'Total Active Days',
+                title: l10n.totalActiveDays,
                 value: '${stats.totalActiveDays}',
                 icon: Icons.calendar_today_rounded,
                 iconColor: AppColors.accentCyan,
@@ -110,7 +114,7 @@ class StatsGrid extends StatelessWidget {
             Expanded(
               child: _buildStatCard(
                 context: context,
-                title: 'Total Marks',
+                title: l10n.totalMarks,
                 value: '${stats.totalContributions}',
                 icon: Icons.auto_graph_rounded,
                 iconColor: AppColors.accentIndigo,

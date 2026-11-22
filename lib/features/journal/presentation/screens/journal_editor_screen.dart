@@ -4,6 +4,8 @@ import 'package:daymark/core/constants/app_typography.dart';
 import 'package:daymark/core/utils/date_utils.dart';
 import 'package:daymark/features/journal/domain/entities/journal_entry.dart';
 import 'package:daymark/features/journal/presentation/providers/journal_provider.dart';
+import 'package:daymark/features/settings/presentation/providers/settings_provider.dart';
+import 'package:daymark/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
@@ -28,16 +30,6 @@ class _JournalEditorScreenState extends ConsumerState<JournalEditorScreen> {
   late bool _isPinned;
   late bool _isFavorite;
   bool _isSaving = false;
-
-  final List<String> _moodOptions = [
-    '⚡ Productive',
-    '✨ Inspired',
-    '🎯 Focused',
-    '🌱 Growing',
-    '🌿 Calm',
-    '🧗 Challenging',
-    '🙏 Grateful',
-  ];
 
   @override
   void initState() {
@@ -78,10 +70,12 @@ class _JournalEditorScreenState extends ConsumerState<JournalEditorScreen> {
   }
 
   Future<void> _saveEntry() async {
+    final l10n = context.l10n;
+
     if (_titleController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please enter a title for your journal.'),
+        SnackBar(
+          content: Text(l10n.titleRequired),
           backgroundColor: AppColors.error,
         ),
       );
@@ -135,20 +129,22 @@ class _JournalEditorScreenState extends ConsumerState<JournalEditorScreen> {
   Widget build(BuildContext context) {
     final colors = context.colors;
     final typo = context.typo;
+    final l10n = context.l10n;
+    final settings = ref.watch(settingsProvider);
     final isEditing = widget.initialEntry != null;
     final displayDate = widget.initialEntry?.createdAt ?? DateTime.now();
 
     return Scaffold(
       backgroundColor: colors.background,
       appBar: AppBar(
-        title: Text(isEditing ? 'Edit Entry' : 'New Mark', style: typo.titleLarge),
+        title: Text(isEditing ? l10n.edit : l10n.newEntry, style: typo.titleLarge),
         actions: [
           IconButton(
             icon: Icon(
               _isPinned ? Icons.push_pin_rounded : Icons.push_pin_outlined,
               color: _isPinned ? AppColors.primary : colors.textMuted,
             ),
-            tooltip: 'Pin Entry',
+            tooltip: l10n.pinned,
             onPressed: () => setState(() => _isPinned = !_isPinned),
           ),
           Padding(
@@ -162,7 +158,7 @@ class _JournalEditorScreenState extends ConsumerState<JournalEditorScreen> {
                       child: CircularProgressIndicator(strokeWidth: 2, color: Colors.black),
                     )
                   : const Icon(Icons.check_rounded, size: 18),
-              label: Text(_isSaving ? 'Saving' : 'Save'),
+              label: Text(_isSaving ? l10n.saving : l10n.save),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 foregroundColor: Colors.black,
@@ -186,7 +182,7 @@ class _JournalEditorScreenState extends ConsumerState<JournalEditorScreen> {
                   Icon(Icons.access_time_rounded, size: 14, color: colors.textMuted),
                   const SizedBox(width: 6),
                   Text(
-                    AppDateUtils.formatDateTimeDisplay(displayDate),
+                    AppDateUtils.formatDateTimeDisplay(displayDate, settings.languageCode),
                     style: typo.monoLabel,
                   ),
                 ],
@@ -199,7 +195,7 @@ class _JournalEditorScreenState extends ConsumerState<JournalEditorScreen> {
                 autofocus: !isEditing,
                 style: typo.displayMedium.copyWith(fontSize: 22),
                 decoration: InputDecoration(
-                  hintText: 'What happened today?',
+                  hintText: l10n.titlePlaceholder,
                   border: InputBorder.none,
                   enabledBorder: InputBorder.none,
                   focusedBorder: InputBorder.none,
@@ -215,7 +211,7 @@ class _JournalEditorScreenState extends ConsumerState<JournalEditorScreen> {
               const SizedBox(height: 16),
 
               // Category Selector
-              Text('CATEGORY', style: typo.monoLabel),
+              Text(l10n.category.toUpperCase(), style: typo.monoLabel),
               const SizedBox(height: 8),
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
@@ -225,7 +221,7 @@ class _JournalEditorScreenState extends ConsumerState<JournalEditorScreen> {
                     return Padding(
                       padding: const EdgeInsets.only(right: 8),
                       child: ChoiceChip(
-                        label: Text(c.name),
+                        label: Text(l10n.categoryName(c.id)),
                         avatar: Icon(c.icon, size: 14, color: isSel ? Colors.black : c.color),
                         selected: isSel,
                         selectedColor: c.color,
@@ -254,12 +250,12 @@ class _JournalEditorScreenState extends ConsumerState<JournalEditorScreen> {
               const SizedBox(height: 16),
 
               // Mood Selector
-              Text('MINDSET / MOOD', style: typo.monoLabel),
+              Text(l10n.mood.toUpperCase(), style: typo.monoLabel),
               const SizedBox(height: 8),
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
-                  children: _moodOptions.map((mood) {
+                  children: l10n.moodOptions.map((mood) {
                     final isSel = _selectedMood == mood;
                     return Padding(
                       padding: const EdgeInsets.only(right: 8),
@@ -291,7 +287,7 @@ class _JournalEditorScreenState extends ConsumerState<JournalEditorScreen> {
               const SizedBox(height: 16),
 
               // Tags
-              Text('TAGS', style: typo.monoLabel),
+              Text(l10n.tags.toUpperCase(), style: typo.monoLabel),
               const SizedBox(height: 8),
               Wrap(
                 spacing: 8,
@@ -318,7 +314,7 @@ class _JournalEditorScreenState extends ConsumerState<JournalEditorScreen> {
                       style: typo.bodySmall,
                       onSubmitted: _addTag,
                       decoration: InputDecoration(
-                        hintText: '+ Add tag...',
+                        hintText: l10n.addTagPlaceholder,
                         contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                         filled: true,
                         fillColor: colors.surfaceElevated,
@@ -341,7 +337,7 @@ class _JournalEditorScreenState extends ConsumerState<JournalEditorScreen> {
               const SizedBox(height: 16),
 
               // Content Body
-              Text('REFLECTION & DETAILS', style: typo.monoLabel),
+              Text(l10n.isIndonesian ? 'REFLEKSI & DETAIL' : 'REFLECTION & DETAILS', style: typo.monoLabel),
               const SizedBox(height: 8),
               TextField(
                 controller: _contentController,
@@ -349,7 +345,7 @@ class _JournalEditorScreenState extends ConsumerState<JournalEditorScreen> {
                 minLines: 12,
                 style: typo.bodyLarge.copyWith(height: 1.7),
                 decoration: InputDecoration(
-                  hintText: 'Describe your journey, key learnings, milestones, challenges, or thoughts...',
+                  hintText: l10n.contentPlaceholder,
                   border: InputBorder.none,
                   enabledBorder: InputBorder.none,
                   focusedBorder: InputBorder.none,

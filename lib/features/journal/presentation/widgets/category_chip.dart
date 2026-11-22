@@ -1,6 +1,7 @@
 import 'package:daymark/core/constants/app_categories.dart';
 import 'package:daymark/core/constants/app_colors.dart';
 import 'package:daymark/core/constants/app_typography.dart';
+import 'package:daymark/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class CategoryChipWidget extends StatelessWidget {
@@ -19,6 +20,7 @@ class CategoryChipWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = context.colors;
     final typo = context.typo;
+    final l10n = context.l10n;
 
     return GestureDetector(
       onTap: onTap,
@@ -43,7 +45,7 @@ class CategoryChipWidget extends StatelessWidget {
             ),
             const SizedBox(width: 6),
             Text(
-              category.name,
+              l10n.categoryName(category.id),
               style: typo.labelMedium.copyWith(
                 color: isSelected ? category.color : colors.textSecondary,
                 fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,

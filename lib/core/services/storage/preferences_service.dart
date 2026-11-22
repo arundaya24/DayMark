@@ -5,6 +5,7 @@ class PreferencesService {
   static const String keyUserBio = 'user_bio';
   static const String keyThemeMode = 'theme_mode'; // 'dark', 'light', 'system'
   static const String keyDateFormat = 'date_format'; // 'dd MMM yyyy', 'yyyy-MM-dd', 'EEEE, dd MMMM yyyy'
+  static const String keyLanguageCode = 'language_code'; // 'id', 'en'
   static const String keyPinEnabled = 'pin_enabled';
   static const String keyPinCode = 'pin_code';
   static const String keyHidePreview = 'hide_preview';
@@ -32,6 +33,9 @@ class PreferencesService {
 
   String getDateFormat() => _prefs.getString(keyDateFormat) ?? 'dd MMM yyyy';
   Future<bool> setDateFormat(String format) => _prefs.setString(keyDateFormat, format);
+
+  String getLanguageCode() => _prefs.getString(keyLanguageCode) ?? 'id';
+  Future<bool> setLanguageCode(String code) => _prefs.setString(keyLanguageCode, code);
 
   bool isPinEnabled() => _prefs.getBool(keyPinEnabled) ?? false;
   Future<bool> setPinEnabled(bool enabled) => _prefs.setBool(keyPinEnabled, enabled);

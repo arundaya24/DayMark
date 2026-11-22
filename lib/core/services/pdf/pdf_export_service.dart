@@ -6,12 +6,26 @@ import 'package:printing/printing.dart';
 
 class PdfExportService {
   /// Generate printable & shareable PDF for a JournalSummary
-  static Future<void> exportSummaryPdf(JournalSummary summary) async {
+  static Future<void> exportSummaryPdf(JournalSummary summary, {String languageCode = 'id'}) async {
+    final isId = languageCode == 'id';
     final doc = pw.Document();
 
     final fontRegular = await PdfGoogleFonts.plusJakartaSansRegular();
     final fontBold = await PdfGoogleFonts.plusJakartaSansBold();
     final fontSemiBold = await PdfGoogleFonts.plusJakartaSansSemiBold();
+
+    final taglineText = isId ? 'Setiap hari meninggalkan jejak.' : 'Every day leaves a mark.';
+    final headerDocTitle = isId ? 'RINGKASAN EKSEKUTIF JURNAL' : 'JOURNAL EXECUTIVE SUMMARY';
+    final totalEntriesLabel = isId ? 'Total Entri' : 'Total Entries';
+    final periodSpanLabel = isId ? 'Rentang Waktu' : 'Period Span';
+    final daysUnit = isId ? 'Hari' : 'Days';
+    final statusLabel = isId ? 'Status' : 'Status';
+    final documentedLabel = isId ? 'Terdokumentasi' : 'Documented';
+    final execOverviewTitle = isId ? 'Ringkasan Eksekutif' : 'Executive Overview';
+    final keyActivitiesTitle = isId ? 'Aktivitas Utama & Lini Masa' : 'Key Activities & Timeline';
+    final keyLearningsTitle = isId ? 'Pembelajaran & Wawasan Utama' : 'Key Learnings & Insights';
+    final achievementsTitle = isId ? 'Pencapaian & Prestasi' : 'Achievements & Milestones';
+    final challengesTitle = isId ? 'Kendala & Mengatasi Hambatan' : 'Challenges & Overcoming Obstacles';
 
     doc.addPage(
       pw.MultiPage(
@@ -42,7 +56,7 @@ class PdfExportService {
                       ),
                     ),
                     pw.Text(
-                      'Every day leaves a mark.',
+                      taglineText,
                       style: const pw.TextStyle(
                         fontSize: 10,
                         color: PdfColors.grey600,
@@ -54,7 +68,7 @@ class PdfExportService {
                   crossAxisAlignment: pw.CrossAxisAlignment.end,
                   children: [
                     pw.Text(
-                      'JOURNAL EXECUTIVE SUMMARY',
+                      headerDocTitle,
                       style: pw.TextStyle(
                         fontSize: 11,
                         fontWeight: pw.FontWeight.bold,
@@ -62,7 +76,7 @@ class PdfExportService {
                       ),
                     ),
                     pw.Text(
-                      '${AppDateUtils.formatDisplay(summary.startDate)} - ${AppDateUtils.formatDisplay(summary.endDate)}',
+                      '${AppDateUtils.formatDisplay(summary.startDate, 'dd MMM yyyy', isId ? 'id' : 'en')} - ${AppDateUtils.formatDisplay(summary.endDate, 'dd MMM yyyy', isId ? 'id' : 'en')}',
                       style: const pw.TextStyle(
                         fontSize: 10,
                         color: PdfColors.grey600,
@@ -75,6 +89,13 @@ class PdfExportService {
           );
         },
         footer: (pw.Context context) {
+          final footerGen = isId
+              ? 'Dihasilkan via ${summary.providerUsed} pada ${AppDateUtils.formatDisplay(summary.generatedAt, 'dd MMM yyyy, HH:mm', 'id')}'
+              : 'Generated via ${summary.providerUsed} on ${AppDateUtils.formatDisplay(summary.generatedAt, 'dd MMM yyyy, HH:mm', 'en')}';
+          final footerPage = isId
+              ? 'Halaman ${context.pageNumber} dari ${context.pagesCount}'
+              : 'Page ${context.pageNumber} of ${context.pagesCount}';
+
           return pw.Container(
             padding: const pw.EdgeInsets.only(top: 12),
             decoration: const pw.BoxDecoration(
@@ -84,11 +105,11 @@ class PdfExportService {
               mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
               children: [
                 pw.Text(
-                  'Generated via ${summary.providerUsed} on ${AppDateUtils.formatDisplay(summary.generatedAt)}',
+                  footerGen,
                   style: const pw.TextStyle(fontSize: 8, color: PdfColors.grey500),
                 ),
                 pw.Text(
-                  'Page ${context.pageNumber} of ${context.pagesCount}',
+                  footerPage,
                   style: const pw.TextStyle(fontSize: 8, color: PdfColors.grey500),
                 ),
               ],
@@ -109,13 +130,13 @@ class PdfExportService {
               child: pw.Row(
                 mainAxisAlignment: pw.MainAxisAlignment.spaceAround,
                 children: [
-                  _buildMetric('Total Entries', summary.totalEntries.toString(), fontBold),
+                  _buildMetric(totalEntriesLabel, summary.totalEntries.toString(), fontBold),
                   _buildMetric(
-                    'Period Span',
-                    '${AppDateUtils.toLocalDateOnly(summary.endDate).difference(AppDateUtils.toLocalDateOnly(summary.startDate)).inDays + 1} Days',
+                    periodSpanLabel,
+                    '${AppDateUtils.toLocalDateOnly(summary.endDate).difference(AppDateUtils.toLocalDateOnly(summary.startDate)).inDays + 1} $daysUnit',
                     fontBold,
                   ),
-                  _buildMetric('Status', 'Documented', fontBold),
+                  _buildMetric(statusLabel, documentedLabel, fontBold),
                 ],
               ),
             ),
@@ -123,7 +144,7 @@ class PdfExportService {
 
             // Executive Summary
             pw.Text(
-              'Executive Overview',
+              execOverviewTitle,
               style: pw.TextStyle(
                 fontSize: 14,
                 font: fontSemiBold,
@@ -143,7 +164,7 @@ class PdfExportService {
 
             // Key Activities
             _buildSection(
-              title: 'Key Activities & Timeline',
+              title: keyActivitiesTitle,
               items: summary.keyActivities,
               accentHex: '#10B981',
               fontSemiBold: fontSemiBold,
@@ -152,7 +173,7 @@ class PdfExportService {
 
             // Learnings
             _buildSection(
-              title: 'Key Learnings & Insights',
+              title: keyLearningsTitle,
               items: summary.learnings,
               accentHex: '#6366F1',
               fontSemiBold: fontSemiBold,
@@ -161,7 +182,7 @@ class PdfExportService {
 
             // Achievements
             _buildSection(
-              title: 'Achievements & Milestones',
+              title: achievementsTitle,
               items: summary.achievements,
               accentHex: '#F59E0B',
               fontSemiBold: fontSemiBold,
@@ -170,7 +191,7 @@ class PdfExportService {
 
             // Challenges
             _buildSection(
-              title: 'Challenges & Overcoming Obstacles',
+              title: challengesTitle,
               items: summary.challenges,
               accentHex: '#EF4444',
               fontSemiBold: fontSemiBold,

@@ -3,6 +3,7 @@ class AppSettings {
   final String userBio;
   final String themeMode; // 'dark', 'light', 'system'
   final String dateFormat;
+  final String languageCode; // 'id', 'en'
   final bool pinEnabled;
   final String? pinCode;
   final bool hidePreview;
@@ -15,6 +16,7 @@ class AppSettings {
     required this.userBio,
     required this.themeMode,
     required this.dateFormat,
+    this.languageCode = 'id',
     required this.pinEnabled,
     this.pinCode,
     required this.hidePreview,
@@ -28,6 +30,7 @@ class AppSettings {
     String? userBio,
     String? themeMode,
     String? dateFormat,
+    String? languageCode,
     bool? pinEnabled,
     String? pinCode,
     bool? hidePreview,
@@ -40,6 +43,7 @@ class AppSettings {
       userBio: userBio ?? this.userBio,
       themeMode: themeMode ?? this.themeMode,
       dateFormat: dateFormat ?? this.dateFormat,
+      languageCode: languageCode ?? this.languageCode,
       pinEnabled: pinEnabled ?? this.pinEnabled,
       pinCode: pinCode ?? this.pinCode,
       hidePreview: hidePreview ?? this.hidePreview,

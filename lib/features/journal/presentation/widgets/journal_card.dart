@@ -3,6 +3,7 @@ import 'package:daymark/core/constants/app_colors.dart';
 import 'package:daymark/core/constants/app_typography.dart';
 import 'package:daymark/core/utils/date_utils.dart';
 import 'package:daymark/features/journal/domain/entities/journal_entry.dart';
+import 'package:daymark/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class JournalCard extends StatelessWidget {
@@ -23,6 +24,7 @@ class JournalCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = context.colors;
     final typo = context.typo;
+    final l10n = context.l10n;
     final category = AppCategories.getById(entry.category);
 
     return GestureDetector(
@@ -56,7 +58,7 @@ class JournalCard extends StatelessWidget {
                       Icon(category.icon, size: 12, color: category.color),
                       const SizedBox(width: 4),
                       Text(
-                        category.name,
+                        l10n.categoryName(entry.category),
                         style: typo.monoLabel.copyWith(
                           color: category.color,
                           fontWeight: FontWeight.w600,
@@ -87,7 +89,7 @@ class JournalCard extends StatelessWidget {
                     child: Icon(Icons.push_pin_rounded, size: 16, color: AppColors.primary),
                   ),
                 Text(
-                  AppDateUtils.formatRelative(entry.createdAt),
+                  AppDateUtils.formatRelative(entry.createdAt, l10n.locale.languageCode),
                   style: typo.monoLabel,
                 ),
               ],

@@ -5,6 +5,7 @@ import 'package:daymark/features/journal/presentation/screens/journal_list_scree
 import 'package:daymark/features/settings/presentation/providers/settings_provider.dart';
 import 'package:daymark/features/settings/presentation/screens/settings_screen.dart';
 import 'package:daymark/features/summary/presentation/screens/summary_screen.dart';
+import 'package:daymark/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -34,7 +35,7 @@ class _MainNavigationShellState extends ConsumerState<MainNavigationShell> {
     super.dispose();
   }
 
-  void _verifyPin(String correctPin) {
+  void _verifyPin(String correctPin, AppLocalizations l10n) {
     if (_pinController.text.trim() == correctPin) {
       setState(() {
         _isUnlocked = true;
@@ -42,7 +43,7 @@ class _MainNavigationShellState extends ConsumerState<MainNavigationShell> {
       });
     } else {
       setState(() {
-        _pinError = 'Incorrect PIN. Please try again.';
+        _pinError = l10n.incorrectPin;
       });
     }
   }
@@ -51,6 +52,7 @@ class _MainNavigationShellState extends ConsumerState<MainNavigationShell> {
   Widget build(BuildContext context) {
     final colors = context.colors;
     final typo = context.typo;
+    final l10n = context.l10n;
     final settings = ref.watch(settingsProvider);
 
     // If PIN is enabled and not yet unlocked in this session, show lock screen
@@ -77,7 +79,7 @@ class _MainNavigationShellState extends ConsumerState<MainNavigationShell> {
                   const SizedBox(height: 20),
                   Text('DAYMARK', style: typo.displayMedium),
                   const SizedBox(height: 6),
-                  Text('Enter your security PIN to access your journal', style: typo.bodySmall),
+                  Text(l10n.enterPinPrompt, style: typo.bodySmall),
                   const SizedBox(height: 28),
                   SizedBox(
                     width: 220,
@@ -93,7 +95,7 @@ class _MainNavigationShellState extends ConsumerState<MainNavigationShell> {
                         hintText: '••••',
                         hintStyle: typo.displayMedium.copyWith(color: colors.textMuted),
                       ),
-                      onSubmitted: (_) => _verifyPin(settings.pinCode!),
+                      onSubmitted: (_) => _verifyPin(settings.pinCode!, l10n),
                     ),
                   ),
                   if (_pinError != null) ...[
@@ -102,14 +104,14 @@ class _MainNavigationShellState extends ConsumerState<MainNavigationShell> {
                   ],
                   const SizedBox(height: 24),
                   ElevatedButton(
-                    onPressed: () => _verifyPin(settings.pinCode!),
+                    onPressed: () => _verifyPin(settings.pinCode!, l10n),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
                       foregroundColor: Colors.black,
                       padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
-                    child: Text('Unlock', style: typo.titleMedium.copyWith(color: Colors.black, fontWeight: FontWeight.w700)),
+                    child: Text(l10n.unlock, style: typo.titleMedium.copyWith(color: Colors.black, fontWeight: FontWeight.w700)),
                   ),
                 ],
               ),
@@ -132,26 +134,26 @@ class _MainNavigationShellState extends ConsumerState<MainNavigationShell> {
         child: BottomNavigationBar(
           currentIndex: _currentIndex,
           onTap: (index) => setState(() => _currentIndex = index),
-          items: const [
+          items: [
             BottomNavigationBarItem(
-              icon: Icon(Icons.dashboard_outlined),
-              activeIcon: Icon(Icons.dashboard_rounded),
-              label: 'Dashboard',
+              icon: const Icon(Icons.dashboard_outlined),
+              activeIcon: const Icon(Icons.dashboard_rounded),
+              label: l10n.dashboard,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.auto_stories_outlined),
-              activeIcon: Icon(Icons.auto_stories_rounded),
-              label: 'Journal',
+              icon: const Icon(Icons.auto_stories_outlined),
+              activeIcon: const Icon(Icons.auto_stories_rounded),
+              label: l10n.journal,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.auto_awesome_outlined),
-              activeIcon: Icon(Icons.auto_awesome_rounded),
-              label: 'Summary',
+              icon: const Icon(Icons.auto_awesome_outlined),
+              activeIcon: const Icon(Icons.auto_awesome_rounded),
+              label: l10n.summary,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.settings_outlined),
-              activeIcon: Icon(Icons.settings_rounded),
-              label: 'Settings',
+              icon: const Icon(Icons.settings_outlined),
+              activeIcon: const Icon(Icons.settings_rounded),
+              label: l10n.settings,
             ),
           ],
         ),

@@ -1,6 +1,7 @@
 import 'package:daymark/core/constants/app_categories.dart';
 import 'package:daymark/core/constants/app_colors.dart';
 import 'package:daymark/core/constants/app_typography.dart';
+import 'package:daymark/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class SearchFilterBar extends StatelessWidget {
@@ -27,6 +28,7 @@ class SearchFilterBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = context.colors;
     final typo = context.typo;
+    final l10n = context.l10n;
     final hasDateFilter = startDate != null || endDate != null;
 
     return Column(
@@ -47,7 +49,7 @@ class SearchFilterBar extends StatelessWidget {
                   onChanged: onSearchChanged,
                   style: typo.bodyMedium.copyWith(color: colors.textPrimary),
                   decoration: InputDecoration(
-                    hintText: 'Search journals, tags, lessons...',
+                    hintText: l10n.searchPlaceholder,
                     prefixIcon: Icon(Icons.search, color: colors.textMuted, size: 20),
                     border: InputBorder.none,
                     enabledBorder: InputBorder.none,
@@ -101,9 +103,9 @@ class SearchFilterBar extends StatelessWidget {
           scrollDirection: Axis.horizontal,
           child: Row(
             children: [
-              _buildCategoryPill(context, 'All', selectedCategory == 'All'),
+              _buildCategoryPill(context, 'All', selectedCategory == 'All', label: l10n.allCategories),
               ...AppCategories.all.map((c) {
-                return _buildCategoryPill(context, c.id, selectedCategory == c.id, label: c.name);
+                return _buildCategoryPill(context, c.id, selectedCategory == c.id, label: l10n.categoryName(c.id));
               }),
             ],
           ),

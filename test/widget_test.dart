@@ -3,7 +3,9 @@ import 'package:daymark/core/utils/date_utils.dart';
 import 'package:daymark/core/utils/streak_calculator.dart';
 import 'package:daymark/features/contribution/presentation/widgets/streak_badge.dart';
 import 'package:daymark/features/journal/domain/entities/journal_entry.dart';
+import 'package:daymark/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -149,6 +151,99 @@ void main() {
       await tester.pumpAndSettle();
       expect(tester.takeException(), isNull);
       expect(find.byType(StreakBadge), findsOneWidget);
+    });
+  });
+
+  group('DAYMARK Summary Screen Executive Overview Overflow Tests', () {
+    testWidgets('Executive Overview footer with long engine string wraps without overflow on 320px screen', (tester) async {
+      tester.view.physicalSize = const Size(320, 640);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.darkTheme,
+          home: Scaffold(
+            body: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(18),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('Executive Overview'),
+                    const SizedBox(height: 10),
+                    const Text('During this 30-day journey, you documented 12 reflections with primary focus on learning.'),
+                    const SizedBox(height: 14),
+                    Wrap(
+                      alignment: WrapAlignment.spaceBetween,
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      spacing: 10,
+                      runSpacing: 8,
+                      children: const [
+                        Text('12 entries analyzed'),
+                        Text('DAYMARK Local Heuristic Engine (Offline)'),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+      expect(tester.takeException(), isNull);
+      expect(find.text('DAYMARK Local Heuristic Engine (Offline)'), findsOneWidget);
+    });
+  });
+
+  group('DAYMARK Localization Multi-Language Tests', () {
+    test('Indonesian (id) provides correct default strings', () {
+      final l10nId = AppLocalizations(const Locale('id'));
+      expect(l10nId.dashboard, 'Dasbor');
+      expect(l10nId.journal, 'Jurnal');
+      expect(l10nId.summary, 'Ringkasan');
+      expect(l10nId.settings, 'Pengaturan');
+      expect(l10nId.markToday, 'Catat Hari Ini');
+      expect(l10nId.currentStreak, 'Streak Saat Ini');
+      expect(l10nId.totalActiveDays, 'Total Hari Aktif');
+      expect(l10nId.generateSummary, 'Buat Ringkasan');
+      expect(l10nId.exportPdf, 'Ekspor PDF');
+      expect(l10nId.tagline, 'Setiap hari meninggalkan jejak.');
+      expect(l10nId.categoryName('daily'), 'Refleksi Harian');
+      expect(l10nId.categoryName('learning'), 'Pembelajaran');
+    });
+
+    test('English (en) provides correct strings', () {
+      final l10nEn = AppLocalizations(const Locale('en'));
+      expect(l10nEn.dashboard, 'Dashboard');
+      expect(l10nEn.journal, 'Journal');
+      expect(l10nEn.summary, 'Summary');
+      expect(l10nEn.settings, 'Settings');
+      expect(l10nEn.markToday, 'Mark Today');
+      expect(l10nEn.currentStreak, 'Current Streak');
+      expect(l10nEn.totalActiveDays, 'Total Active Days');
+      expect(l10nEn.generateSummary, 'Generate Summary');
+      expect(l10nEn.exportPdf, 'Export PDF');
+      expect(l10nEn.tagline, 'Every day leaves a mark.');
+      expect(l10nEn.categoryName('daily'), 'Daily Reflection');
+      expect(l10nEn.categoryName('learning'), 'Learning');
+    });
+
+    test('Greeting changes with locale and time', () {
+      final morning = DateTime(2026, 11, 22, 9, 0);
+      final l10nId = AppLocalizations(const Locale('id'));
+      final l10nEn = AppLocalizations(const Locale('en'));
+
+      expect(l10nId.greeting(morning), 'Selamat pagi');
+      expect(l10nEn.greeting(morning), 'Good morning');
     });
   });
 }

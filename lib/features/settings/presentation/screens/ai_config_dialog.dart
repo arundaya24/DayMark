@@ -1,5 +1,6 @@
 import 'package:daymark/core/constants/app_colors.dart';
 import 'package:daymark/core/constants/app_typography.dart';
+import 'package:daymark/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class AiConfigDialog extends StatefulWidget {
@@ -41,21 +42,24 @@ class _AiConfigDialogState extends State<AiConfigDialog> {
   Widget build(BuildContext context) {
     final colors = context.colors;
     final typo = context.typo;
+    final l10n = context.l10n;
 
     return AlertDialog(
       backgroundColor: colors.surface,
-      title: Text('AI Provider Settings', style: typo.headlineMedium),
+      title: Text(l10n.isIndonesian ? 'Pengaturan Layanan AI' : 'AI Provider Settings', style: typo.headlineMedium),
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'DAYMARK supports both local offline heuristic AI and cloud Google Gemini API.',
+              l10n.isIndonesian
+                  ? 'DAYMARK mendukung AI heuristik offline lokal dan API cloud Google Gemini.'
+                  : 'DAYMARK supports both local offline heuristic AI and cloud Google Gemini API.',
               style: typo.bodySmall,
             ),
             const SizedBox(height: 16),
-            Text('SUMMARY PROVIDER', style: typo.monoLabel),
+            Text(l10n.summaryEngine.toUpperCase(), style: typo.monoLabel),
             const SizedBox(height: 8),
             GestureDetector(
               onTap: () => setState(() => _provider = 'local'),
@@ -81,8 +85,8 @@ class _AiConfigDialogState extends State<AiConfigDialog> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Local Heuristic Engine', style: typo.titleMedium),
-                          Text('100% offline, privacy guaranteed', style: typo.bodySmall),
+                          Text(l10n.isIndonesian ? 'Mesin Heuristik Lokal' : 'Local Heuristic Engine', style: typo.titleMedium),
+                          Text(l10n.isIndonesian ? '100% offline, privasi terjamin' : '100% offline, privacy guaranteed', style: typo.bodySmall),
                         ],
                       ),
                     ),
@@ -114,7 +118,7 @@ class _AiConfigDialogState extends State<AiConfigDialog> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text('Google Gemini API', style: typo.titleMedium),
-                          Text('Contextual LLM intelligence via REST API', style: typo.bodySmall),
+                          Text(l10n.isIndonesian ? 'Kecerdasan LLM kontekstual via REST API' : 'Contextual LLM intelligence via REST API', style: typo.bodySmall),
                         ],
                       ),
                     ),
@@ -159,7 +163,7 @@ class _AiConfigDialogState extends State<AiConfigDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: Text('Cancel', style: typo.labelMedium),
+          child: Text(l10n.cancel, style: typo.labelMedium),
         ),
         ElevatedButton(
           onPressed: () {
@@ -173,7 +177,7 @@ class _AiConfigDialogState extends State<AiConfigDialog> {
             backgroundColor: AppColors.primary,
             foregroundColor: Colors.black,
           ),
-          child: const Text('Save'),
+          child: Text(l10n.save, style: const TextStyle(color: Colors.black, fontWeight: FontWeight.w700)),
         ),
       ],
     );

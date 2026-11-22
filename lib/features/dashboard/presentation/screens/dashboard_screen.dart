@@ -10,6 +10,7 @@ import 'package:daymark/features/journal/presentation/screens/journal_detail_scr
 import 'package:daymark/features/journal/presentation/screens/journal_editor_screen.dart';
 import 'package:daymark/features/journal/presentation/widgets/journal_card.dart';
 import 'package:daymark/features/settings/presentation/providers/settings_provider.dart';
+import 'package:daymark/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -20,13 +21,14 @@ class DashboardScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final colors = context.colors;
     final typo = context.typo;
+    final l10n = context.l10n;
     final settings = ref.watch(settingsProvider);
     final streakStatsAsync = ref.watch(streakStatsProvider);
     final recentJournalsAsync = ref.watch(recentJournalsProvider);
     final repository = ref.watch(journalRepositoryProvider);
 
     final now = DateTime.now();
-    final greeting = AppDateUtils.getTimeGreeting(now);
+    final greeting = l10n.greeting(now);
 
     return Scaffold(
       backgroundColor: colors.background,
@@ -62,7 +64,7 @@ class DashboardScreen extends ConsumerWidget {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            AppDateUtils.formatDisplay(now, 'EEEE, dd MMMM yyyy'),
+                            AppDateUtils.formatDisplay(now, 'EEEE, dd MMMM yyyy', settings.languageCode),
                             style: typo.monoLabel.copyWith(
                               color: colors.textMuted,
                               fontSize: 12,
@@ -99,7 +101,7 @@ class DashboardScreen extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Every day leaves a mark.',
+                              l10n.tagline,
                               style: typo.titleLarge.copyWith(
                                 color: AppColors.primary,
                                 fontWeight: FontWeight.w700,
@@ -107,7 +109,7 @@ class DashboardScreen extends ConsumerWidget {
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              'Capture a reflection, insight, or achievement for today.',
+                              l10n.taglineSubtitle,
                               style: typo.bodySmall,
                             ),
                           ],
@@ -130,7 +132,7 @@ class DashboardScreen extends ConsumerWidget {
                         ),
                         icon: const Icon(Icons.add, size: 18),
                         label: Text(
-                          'Mark Today',
+                          l10n.markToday,
                           style: typo.titleMedium.copyWith(
                             color: Colors.black,
                             fontSize: 13,
@@ -183,9 +185,9 @@ class DashboardScreen extends ConsumerWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('RECENT MARKS', style: typo.monoLabel),
+                    Text(l10n.recentMarks, style: typo.monoLabel),
                     Text(
-                      'Last 5 Entries',
+                      l10n.last5Entries,
                       style: typo.monoLabel.copyWith(color: colors.textMuted),
                     ),
                   ],
@@ -208,10 +210,10 @@ class DashboardScreen extends ConsumerWidget {
                           children: [
                             Icon(Icons.edit_note_rounded, size: 36, color: colors.textMuted),
                             const SizedBox(height: 10),
-                            Text('No marks recorded yet', style: typo.titleMedium),
+                            Text(l10n.noMarksYet, style: typo.titleMedium),
                             const SizedBox(height: 4),
                             Text(
-                              'Tap "Mark Today" above to start your streak!',
+                              l10n.startStreakPrompt,
                               style: typo.bodySmall,
                             ),
                           ],
@@ -252,6 +254,7 @@ class DashboardScreen extends ConsumerWidget {
   Widget _buildMonthlyStatsCard(BuildContext context, StreakStats stats) {
     final colors = context.colors;
     final typo = context.typo;
+    final l10n = context.l10n;
 
     return Container(
       padding: const EdgeInsets.all(18),
@@ -274,7 +277,7 @@ class DashboardScreen extends ConsumerWidget {
                     const SizedBox(width: 8),
                     Flexible(
                       child: Text(
-                        'Activity Breakdown',
+                        l10n.activityBreakdown,
                         style: typo.titleLarge,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -284,7 +287,7 @@ class DashboardScreen extends ConsumerWidget {
               ),
               const SizedBox(width: 8),
               Text(
-                'This Month: ${stats.thisMonthContributions}',
+                '${l10n.thisMonth}: ${stats.thisMonthContributions}',
                 style: typo.monoLabel.copyWith(color: AppColors.primary),
               ),
             ],
@@ -293,11 +296,11 @@ class DashboardScreen extends ConsumerWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _buildStatMetric(context, 'This Week', '${stats.thisWeekContributions}', Icons.view_week_outlined),
+              _buildStatMetric(context, l10n.thisWeek, '${stats.thisWeekContributions}', Icons.view_week_outlined),
               Container(width: 1, height: 36, color: colors.borderSubtle),
-              _buildStatMetric(context, 'This Month', '${stats.thisMonthContributions}', Icons.calendar_month_outlined),
+              _buildStatMetric(context, l10n.thisMonth, '${stats.thisMonthContributions}', Icons.calendar_month_outlined),
               Container(width: 1, height: 36, color: colors.borderSubtle),
-              _buildStatMetric(context, 'This Year', '${stats.thisYearContributions}', Icons.date_range_outlined),
+              _buildStatMetric(context, l10n.thisYear, '${stats.thisYearContributions}', Icons.date_range_outlined),
             ],
           ),
         ],

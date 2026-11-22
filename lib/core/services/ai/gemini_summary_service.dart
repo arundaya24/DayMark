@@ -24,13 +24,17 @@ class GeminiSummaryService implements AiSummaryService {
     required List<JournalEntry> entries,
     required DateTime startDate,
     required DateTime endDate,
+    String languageCode = 'id',
   }) async {
+    final isId = languageCode == 'id';
+
     if (apiKey.trim().isEmpty) {
       // Fallback seamlessly to local heuristic engine
       return await _fallbackService.generateSummary(
         entries: entries,
         startDate: startDate,
         endDate: endDate,
+        languageCode: languageCode,
       );
     }
 
@@ -39,17 +43,24 @@ class GeminiSummaryService implements AiSummaryService {
         entries: entries,
         startDate: startDate,
         endDate: endDate,
+        languageCode: languageCode,
       );
     }
 
     try {
       final entriesText = entries.map((e) {
-        return 'Date: ${AppDateUtils.formatDisplay(e.createdAt)}\nTitle: ${e.title}\nCategory: ${e.category}\nContent: ${e.content}\n---';
+        return 'Date: ${AppDateUtils.formatDisplay(e.createdAt, 'dd MMM yyyy', isId ? 'id' : 'en')}\nTitle: ${e.title}\nCategory: ${e.category}\nContent: ${e.content}\n---';
       }).join('\n');
+
+      final languageInstruction = isId
+          ? 'CRITICAL LANGUAGE REQUIREMENT: You MUST generate executiveSummary, learnings, achievements, and challenges strictly in BAHASA INDONESIA. Keep user\'s original activity names or journal titles faithful and authentic, but provide the synthesis and commentary in natural, inspiring, and professional Bahasa Indonesia.'
+          : 'CRITICAL LANGUAGE REQUIREMENT: You MUST generate executiveSummary, learnings, achievements, and challenges strictly in ENGLISH. Keep user\'s original activity names or journal titles faithful and authentic, but provide the synthesis and commentary in natural, inspiring, and professional English.';
 
       final prompt = '''
 You are an expert personal reflection and executive summary assistant for the DAYMARK journal app.
-Analyze the following user journal entries written between ${AppDateUtils.formatDisplay(startDate)} and ${AppDateUtils.formatDisplay(endDate)}.
+Analyze the following user journal entries written between ${AppDateUtils.formatDisplay(startDate, 'dd MMM yyyy', isId ? 'id' : 'en')} and ${AppDateUtils.formatDisplay(endDate, 'dd MMM yyyy', isId ? 'id' : 'en')}.
+
+$languageInstruction
 
 CRITICAL RULES:
 1. Base your summary SOLELY and STRICTLY on the provided entries below. Do NOT hallucinate or make up any event or information that the user never wrote.
@@ -125,6 +136,7 @@ $entriesText
         entries: entries,
         startDate: startDate,
         endDate: endDate,
+        languageCode: languageCode,
       );
     } catch (_) {
       // On network failure or timeout, fallback gracefully
@@ -132,6 +144,7 @@ $entriesText
         entries: entries,
         startDate: startDate,
         endDate: endDate,
+        languageCode: languageCode,
       );
     }
   }

@@ -12,13 +12,20 @@ class LocalHeuristicSummaryService implements AiSummaryService {
     required List<JournalEntry> entries,
     required DateTime startDate,
     required DateTime endDate,
+    String languageCode = 'id',
   }) async {
+    final isId = languageCode == 'id';
+
     if (entries.isEmpty) {
+      final noEntriesText = isId
+          ? 'Tidak ada entri jurnal yang ditemukan pada periode yang dipilih (${AppDateUtils.formatDisplay(startDate, 'dd MMM yyyy', 'id')} - ${AppDateUtils.formatDisplay(endDate, 'dd MMM yyyy', 'id')}).'
+          : 'No journal entries were found in the selected period (${AppDateUtils.formatDisplay(startDate, 'dd MMM yyyy', 'en')} - ${AppDateUtils.formatDisplay(endDate, 'dd MMM yyyy', 'en')}).';
+
       return JournalSummary(
         startDate: startDate,
         endDate: endDate,
         totalEntries: 0,
-        executiveSummary: 'No journal entries were found in the selected period (${AppDateUtils.formatDisplay(startDate)} - ${AppDateUtils.formatDisplay(endDate)}).',
+        executiveSummary: noEntriesText,
         keyActivities: [],
         learnings: [],
         achievements: [],
@@ -52,7 +59,7 @@ class LocalHeuristicSummaryService implements AiSummaryService {
     ];
 
     for (final entry in sorted) {
-      final dateTag = AppDateUtils.formatDisplay(entry.createdAt);
+      final dateTag = AppDateUtils.formatDisplay(entry.createdAt, 'dd MMM yyyy', isId ? 'id' : 'en');
       
       // Activities
       keyActivities.add('[$dateTag] ${entry.title.trim()}');
@@ -97,9 +104,50 @@ class LocalHeuristicSummaryService implements AiSummaryService {
     }
 
     final topCategory = categoryCounts.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
-    final primaryCategory = topCategory.isNotEmpty ? topCategory.first.key : 'journaling';
+    final primaryCategory = topCategory.isNotEmpty ? topCategory.first.key : 'daily';
 
-    final executiveSummary = 'During this $spanDays-day journey from ${AppDateUtils.formatDisplay(startDate)} to ${AppDateUtils.formatDisplay(endDate)}, you documented ${entries.length} reflections with primary focus on $primaryCategory. You maintained regular documentation reflecting intentional growth, continuous learning, and clear milestones.';
+    String categoryLabel;
+    switch (primaryCategory.toLowerCase()) {
+      case 'daily':
+        categoryLabel = isId ? 'Refleksi Harian' : 'Daily Reflection';
+        break;
+      case 'learning':
+        categoryLabel = isId ? 'Pembelajaran' : 'Learning';
+        break;
+      case 'work':
+        categoryLabel = isId ? 'Kerja & Proyek' : 'Work & Projects';
+        break;
+      case 'milestone':
+        categoryLabel = isId ? 'Pencapaian' : 'Milestone';
+        break;
+      case 'health':
+        categoryLabel = isId ? 'Kesehatan & Kebugaran' : 'Health & Wellness';
+        break;
+      case 'ideas':
+        categoryLabel = isId ? 'Ide & Pemikiran' : 'Ideas & Thoughts';
+        break;
+      default:
+        categoryLabel = primaryCategory;
+    }
+
+    final String startFormatted = AppDateUtils.formatDisplay(startDate, 'dd MMMM yyyy', isId ? 'id' : 'en');
+    final String endFormatted = AppDateUtils.formatDisplay(endDate, 'dd MMMM yyyy', isId ? 'id' : 'en');
+
+    final String executiveSummary = isId
+        ? 'Selama periode $spanDays hari dari $startFormatted hingga $endFormatted, Anda telah mendokumentasikan ${entries.length} refleksi dengan fokus utama pada $categoryLabel. Anda secara konsisten mencatat pengalaman, menjaga momentum pertumbuhan pribadi, dan menyelesaikan target penting harian.'
+        : 'During this $spanDays-day journey from $startFormatted to $endFormatted, you documented ${entries.length} reflections with primary focus on $categoryLabel. You maintained regular documentation reflecting intentional growth, continuous learning, and clear milestones.';
+
+    final List<String> defaultLearnings = isId
+        ? ['Merenungkan progres harian dan menjaga konsistensi refleksi diri.', 'Memperoleh wawasan berharga dari berbagai aktivitas yang dijalani.']
+        : ['Reflected on daily progress and maintained personal consistency.'];
+
+    final List<String> defaultAchievements = isId
+        ? ['Berhasil mencatat pemikiran secara teratur dan mempertahankan rutinitas jurnal.', 'Menyelesaikan berbagai target dan aktivitas pada periode ini.']
+        : ['Successfully documented thoughts and sustained documentation habits.'];
+
+    final List<String> defaultChallenges = isId
+        ? ['Mengelola berbagai tanggung jawab harian sambil tetap meluangkan waktu untuk refleksi mendalam.']
+        : ['Navigated daily responsibilities while preserving reflective journaling time.'];
 
     return JournalSummary(
       startDate: startDate,
@@ -107,9 +155,9 @@ class LocalHeuristicSummaryService implements AiSummaryService {
       totalEntries: entries.length,
       executiveSummary: executiveSummary,
       keyActivities: keyActivities.take(15).toList(),
-      learnings: learnings.isNotEmpty ? learnings.take(10).toList() : ['Reflected on daily progress and maintained personal consistency.'],
-      achievements: achievements.isNotEmpty ? achievements.take(10).toList() : ['Successfully documented thoughts and sustained documentation habits.'],
-      challenges: challenges.isNotEmpty ? challenges.take(10).toList() : ['Navigated daily responsibilities while preserving reflective journaling time.'],
+      learnings: learnings.isNotEmpty ? learnings.take(10).toList() : defaultLearnings,
+      achievements: achievements.isNotEmpty ? achievements.take(10).toList() : defaultAchievements,
+      challenges: challenges.isNotEmpty ? challenges.take(10).toList() : defaultChallenges,
       generatedAt: DateTime.now(),
       providerUsed: 'DAYMARK Local Heuristic Engine (Offline)',
     );

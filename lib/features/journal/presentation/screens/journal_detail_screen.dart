@@ -4,6 +4,8 @@ import 'package:daymark/core/constants/app_typography.dart';
 import 'package:daymark/core/utils/date_utils.dart';
 import 'package:daymark/features/journal/domain/entities/journal_entry.dart';
 import 'package:daymark/features/journal/presentation/providers/journal_provider.dart';
+import 'package:daymark/features/settings/presentation/providers/settings_provider.dart';
+import 'package:daymark/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'journal_editor_screen.dart';
@@ -41,21 +43,22 @@ class _JournalDetailScreenState extends ConsumerState<JournalDetailScreen> {
   void _confirmDelete() {
     final colors = context.colors;
     final typo = context.typo;
+    final l10n = context.l10n;
 
     showDialog(
       context: context,
       builder: (ctx) {
         return AlertDialog(
           backgroundColor: colors.surface,
-          title: Text('Delete Journal?', style: typo.headlineMedium),
+          title: Text(l10n.deleteJournalTitle, style: typo.headlineMedium),
           content: Text(
-            'Are you sure you want to delete "${_currentEntry.title}"? This action cannot be undone and will update your activity count.',
+            l10n.deleteConfirmation(_currentEntry.title),
             style: typo.bodyMedium,
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(ctx),
-              child: Text('Cancel', style: typo.labelMedium),
+              child: Text(l10n.cancel, style: typo.labelMedium),
             ),
             ElevatedButton(
               onPressed: () async {
@@ -70,7 +73,7 @@ class _JournalDetailScreenState extends ConsumerState<JournalDetailScreen> {
                 foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
               ),
-              child: const Text('Delete'),
+              child: Text(l10n.delete),
             ),
           ],
         );
@@ -82,21 +85,23 @@ class _JournalDetailScreenState extends ConsumerState<JournalDetailScreen> {
   Widget build(BuildContext context) {
     final colors = context.colors;
     final typo = context.typo;
+    final l10n = context.l10n;
+    final settings = ref.watch(settingsProvider);
     final category = AppCategories.getById(_currentEntry.category);
 
     return Scaffold(
       backgroundColor: colors.background,
       appBar: AppBar(
-        title: Text('Journal Entry', style: typo.titleLarge),
+        title: Text(l10n.journalEntry, style: typo.titleLarge),
         actions: [
           IconButton(
             icon: const Icon(Icons.edit_outlined, color: AppColors.primary),
-            tooltip: 'Edit',
+            tooltip: l10n.edit,
             onPressed: _onEdit,
           ),
           IconButton(
             icon: const Icon(Icons.delete_outline, color: AppColors.error),
-            tooltip: 'Delete',
+            tooltip: l10n.delete,
             onPressed: _confirmDelete,
           ),
         ],
@@ -123,7 +128,7 @@ class _JournalDetailScreenState extends ConsumerState<JournalDetailScreen> {
                         Icon(category.icon, size: 14, color: category.color),
                         const SizedBox(width: 6),
                         Text(
-                          category.name,
+                          l10n.categoryName(_currentEntry.category),
                           style: typo.monoLabel.copyWith(
                             color: category.color,
                             fontWeight: FontWeight.w700,
@@ -166,14 +171,14 @@ class _JournalDetailScreenState extends ConsumerState<JournalDetailScreen> {
                   Icon(Icons.calendar_today_rounded, size: 14, color: colors.textMuted),
                   const SizedBox(width: 6),
                   Text(
-                    AppDateUtils.formatDisplay(_currentEntry.createdAt, 'EEEE, dd MMMM yyyy'),
+                    AppDateUtils.formatDisplay(_currentEntry.createdAt, 'EEEE, dd MMMM yyyy', settings.languageCode),
                     style: typo.monoLabel,
                   ),
                   const SizedBox(width: 12),
                   Icon(Icons.access_time_rounded, size: 14, color: colors.textMuted),
                   const SizedBox(width: 6),
                   Text(
-                    AppDateUtils.formatDisplay(_currentEntry.createdAt, 'HH:mm'),
+                    AppDateUtils.formatDisplay(_currentEntry.createdAt, 'HH:mm', settings.languageCode),
                     style: typo.monoLabel,
                   ),
                 ],
