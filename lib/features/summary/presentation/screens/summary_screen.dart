@@ -1,12 +1,12 @@
+import 'package:daymark/core/constants/app_colors.dart';
+import 'package:daymark/core/constants/app_typography.dart';
+import 'package:daymark/core/services/pdf/pdf_export_service.dart';
+import 'package:daymark/core/utils/date_utils.dart';
+import 'package:daymark/features/settings/presentation/providers/settings_provider.dart';
+import 'package:daymark/features/summary/domain/entities/journal_summary.dart';
+import 'package:daymark/features/summary/presentation/providers/summary_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/constants/app_colors.dart';
-import '../../../../core/constants/app_typography.dart';
-import '../../../../core/services/pdf/pdf_export_service.dart';
-import '../../../../core/utils/date_utils.dart';
-import '../../settings/presentation/providers/settings_provider.dart';
-import '../domain/entities/journal_summary.dart';
-import '../providers/summary_provider.dart';
 
 class SummaryScreen extends ConsumerWidget {
   const SummaryScreen({super.key});
@@ -83,7 +83,7 @@ class SummaryScreen extends ConsumerWidget {
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                           decoration: BoxDecoration(
-                            color: AppColors.primary.withOpacity(0.12),
+                            color: AppColors.primary.withValues(alpha: 0.12),
                             borderRadius: BorderRadius.circular(6),
                           ),
                           child: Text(
@@ -194,9 +194,9 @@ class SummaryScreen extends ConsumerWidget {
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: AppColors.error.withOpacity(0.1),
+                    color: AppColors.error.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: AppColors.error.withOpacity(0.3)),
+                    border: Border.all(color: AppColors.error.withValues(alpha: 0.3)),
                   ),
                   child: Row(
                     children: [

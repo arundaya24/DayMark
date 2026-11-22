@@ -1,10 +1,10 @@
+import 'package:daymark/core/constants/app_colors.dart';
+import 'package:daymark/core/constants/app_typography.dart';
+import 'package:daymark/core/services/backup/backup_service.dart';
+import 'package:daymark/features/journal/presentation/providers/journal_provider.dart';
+import 'package:daymark/features/settings/presentation/providers/settings_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/constants/app_colors.dart';
-import '../../../../core/constants/app_typography.dart';
-import '../../../../core/services/backup/backup_service.dart';
-import '../../journal/presentation/providers/journal_provider.dart';
-import '../providers/settings_provider.dart';
 import 'ai_config_dialog.dart';
 import 'pin_lock_dialog.dart';
 import 'profile_edit_dialog.dart';
@@ -46,7 +46,7 @@ class SettingsScreen extends ConsumerWidget {
                 children: [
                   CircleAvatar(
                     radius: 28,
-                    backgroundColor: AppColors.primary.withOpacity(0.18),
+                    backgroundColor: AppColors.primary.withValues(alpha: 0.18),
                     child: Text(
                       settings.userName.isNotEmpty ? settings.userName.substring(0, 1).toUpperCase() : 'D',
                       style: AppTypography.displayMedium.copyWith(
@@ -117,7 +117,7 @@ class SettingsScreen extends ConsumerWidget {
               title: Text('Hide Journal Previews', style: AppTypography.titleMedium),
               subtitle: Text('Mask journal content previews in timeline', style: AppTypography.bodySmall),
               value: settings.hidePreview,
-              activeColor: AppColors.primary,
+              activeThumbColor: AppColors.primary,
               onChanged: (val) => settingsNotifier.setHidePreview(val),
             ),
             const SizedBox(height: 8),
@@ -127,7 +127,7 @@ class SettingsScreen extends ConsumerWidget {
               subtitle: settings.pinEnabled ? 'PIN Lock Enabled' : 'Disabled (Open Access)',
               trailing: Switch(
                 value: settings.pinEnabled,
-                activeColor: AppColors.primary,
+                activeThumbColor: AppColors.primary,
                 onChanged: (val) async {
                   if (val) {
                     final pin = await showDialog<String>(

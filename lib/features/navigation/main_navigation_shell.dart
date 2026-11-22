@@ -1,13 +1,12 @@
+import 'package:daymark/core/constants/app_colors.dart';
+import 'package:daymark/core/constants/app_typography.dart';
+import 'package:daymark/features/dashboard/presentation/screens/dashboard_screen.dart';
+import 'package:daymark/features/journal/presentation/screens/journal_list_screen.dart';
+import 'package:daymark/features/settings/presentation/providers/settings_provider.dart';
+import 'package:daymark/features/settings/presentation/screens/settings_screen.dart';
+import 'package:daymark/features/summary/presentation/screens/summary_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../core/constants/app_colors.dart';
-import '../../core/constants/app_typography.dart';
-import '../dashboard/presentation/screens/dashboard_screen.dart';
-import '../journal/presentation/screens/journal_editor_screen.dart';
-import '../journal/presentation/screens/journal_list_screen.dart';
-import '../settings/presentation/providers/settings_provider.dart';
-import '../settings/presentation/screens/settings_screen.dart';
-import '../summary/presentation/screens/summary_screen.dart';
 
 class MainNavigationShell extends ConsumerStatefulWidget {
   const MainNavigationShell({super.key});
@@ -69,7 +68,7 @@ class _MainNavigationShellState extends ConsumerState<MainNavigationShell> {
                     decoration: BoxDecoration(
                       color: AppColors.surfaceElevated,
                       shape: BoxShape.circle,
-                      border: Border.all(color: AppColors.primary.withOpacity(0.4)),
+                      border: Border.all(color: AppColors.primary.withValues(alpha: 0.4)),
                     ),
                     child: const Icon(Icons.lock_rounded, size: 36, color: AppColors.primary),
                   ),

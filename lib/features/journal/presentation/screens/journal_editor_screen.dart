@@ -1,12 +1,12 @@
+import 'package:daymark/core/constants/app_categories.dart';
+import 'package:daymark/core/constants/app_colors.dart';
+import 'package:daymark/core/constants/app_typography.dart';
+import 'package:daymark/core/utils/date_utils.dart';
+import 'package:daymark/features/journal/domain/entities/journal_entry.dart';
+import 'package:daymark/features/journal/presentation/providers/journal_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
-import '../../../../core/constants/app_colors.dart';
-import '../../../../core/constants/app_typography.dart';
-import '../../../../core/constants/app_categories.dart';
-import '../../../../core/utils/date_utils.dart';
-import '../../domain/entities/journal_entry.dart';
-import '../providers/journal_provider.dart';
 
 class JournalEditorScreen extends ConsumerStatefulWidget {
   final JournalEntry? initialEntry;
@@ -18,7 +18,6 @@ class JournalEditorScreen extends ConsumerStatefulWidget {
 }
 
 class _JournalEditorScreenState extends ConsumerState<JournalEditorScreen> {
-  final _formKey = GlobalKey<FormState>();
   late final TextEditingController _titleController;
   late final TextEditingController _contentController;
   late final TextEditingController _tagInputController;
@@ -264,7 +263,7 @@ class _JournalEditorScreenState extends ConsumerState<JournalEditorScreen> {
                       child: FilterChip(
                         label: Text(mood),
                         selected: isSel,
-                        selectedColor: AppColors.primary.withOpacity(0.2),
+                        selectedColor: AppColors.primary.withValues(alpha: 0.2),
                         backgroundColor: AppColors.surfaceElevated,
                         labelStyle: AppTypography.labelMedium.copyWith(
                           color: isSel ? AppColors.primary : AppColors.textSecondary,

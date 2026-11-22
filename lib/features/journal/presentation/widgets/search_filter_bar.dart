@@ -1,8 +1,7 @@
+import 'package:daymark/core/constants/app_categories.dart';
+import 'package:daymark/core/constants/app_colors.dart';
+import 'package:daymark/core/constants/app_typography.dart';
 import 'package:flutter/material.dart';
-import '../../../../core/constants/app_colors.dart';
-import '../../../../core/constants/app_typography.dart';
-import '../../../../core/constants/app_categories.dart';
-import '../../../../core/utils/date_utils.dart';
 
 class SearchFilterBar extends StatelessWidget {
   final String searchQuery;
@@ -64,7 +63,7 @@ class SearchFilterBar extends StatelessWidget {
                 height: 46,
                 padding: const EdgeInsets.symmetric(horizontal: 14),
                 decoration: BoxDecoration(
-                  color: hasDateFilter ? AppColors.primary.withOpacity(0.15) : AppColors.surface,
+                  color: hasDateFilter ? AppColors.primary.withValues(alpha: 0.15) : AppColors.surface,
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
                     color: hasDateFilter ? AppColors.primary : AppColors.border,

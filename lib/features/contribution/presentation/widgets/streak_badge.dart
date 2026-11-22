@@ -1,7 +1,7 @@
+import 'package:daymark/core/constants/app_colors.dart';
+import 'package:daymark/core/constants/app_typography.dart';
+import 'package:daymark/core/utils/streak_calculator.dart';
 import 'package:flutter/material.dart';
-import '../../../../core/constants/app_colors.dart';
-import '../../../../core/constants/app_typography.dart';
-import '../../../../core/utils/streak_calculator.dart';
 
 class StreakBadge extends StatelessWidget {
   final int currentStreak;
@@ -22,10 +22,10 @@ class StreakBadge extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
         decoration: BoxDecoration(
-          color: hasStreak ? AppColors.accentGold.withOpacity(0.12) : AppColors.surfaceHighlight,
+          color: hasStreak ? AppColors.accentGold.withValues(alpha: 0.12) : AppColors.surfaceHighlight,
           borderRadius: BorderRadius.circular(30),
           border: Border.all(
-            color: hasStreak ? AppColors.accentGold.withOpacity(0.4) : AppColors.border,
+            color: hasStreak ? AppColors.accentGold.withValues(alpha: 0.4) : AppColors.border,
             width: 1,
           ),
         ),
@@ -49,7 +49,7 @@ class StreakBadge extends StatelessWidget {
             Text(
               'day streak',
               style: AppTypography.labelMedium.copyWith(
-                color: hasStreak ? AppColors.accentGold.withOpacity(0.9) : AppColors.textMuted,
+                color: hasStreak ? AppColors.accentGold.withValues(alpha: 0.9) : AppColors.textMuted,
                 fontSize: 11,
               ),
             ),

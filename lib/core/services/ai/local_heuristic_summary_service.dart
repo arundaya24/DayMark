@@ -1,6 +1,6 @@
-import '../../features/journal/domain/entities/journal_entry.dart';
-import '../../features/summary/domain/entities/journal_summary.dart';
-import '../utils/date_utils.dart';
+import 'package:daymark/core/utils/date_utils.dart';
+import 'package:daymark/features/journal/domain/entities/journal_entry.dart';
+import 'package:daymark/features/summary/domain/entities/journal_summary.dart';
 import 'ai_summary_service.dart';
 
 /// Intelligent local heuristic summarizer.
@@ -99,7 +99,7 @@ class LocalHeuristicSummaryService implements AiSummaryService {
     final topCategory = categoryCounts.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
     final primaryCategory = topCategory.isNotEmpty ? topCategory.first.key : 'journaling';
 
-    final executiveSummary = 'During this ${spanDays}-day journey from ${AppDateUtils.formatDisplay(startDate)} to ${AppDateUtils.formatDisplay(endDate)}, you documented ${entries.length} reflections with primary focus on $primaryCategory. You maintained regular documentation reflecting intentional growth, continuous learning, and clear milestones.';
+    final executiveSummary = 'During this $spanDays-day journey from ${AppDateUtils.formatDisplay(startDate)} to ${AppDateUtils.formatDisplay(endDate)}, you documented ${entries.length} reflections with primary focus on $primaryCategory. You maintained regular documentation reflecting intentional growth, continuous learning, and clear milestones.';
 
     return JournalSummary(
       startDate: startDate,

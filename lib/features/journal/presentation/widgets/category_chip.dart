@@ -1,7 +1,7 @@
+import 'package:daymark/core/constants/app_categories.dart';
+import 'package:daymark/core/constants/app_colors.dart';
+import 'package:daymark/core/constants/app_typography.dart';
 import 'package:flutter/material.dart';
-import '../../../../core/constants/app_colors.dart';
-import '../../../../core/constants/app_typography.dart';
-import '../../../../core/constants/app_categories.dart';
 
 class CategoryChipWidget extends StatelessWidget {
   final JournalCategory category;
@@ -23,7 +23,7 @@ class CategoryChipWidget extends StatelessWidget {
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? category.color.withOpacity(0.18) : AppColors.surfaceElevated,
+          color: isSelected ? category.color.withValues(alpha: 0.18) : AppColors.surfaceElevated,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
             color: isSelected ? category.color : AppColors.border,

@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 class AppDatabase {
@@ -59,7 +58,7 @@ class AppDatabase {
       )
     ''');
 
-    // Activities Table (Activity logs for GitHub-style heatmap & streak calculation)
+    // Activities Table (Activity logs for GitHub-style heatmap & streak tracking)
     await db.execute('''
       CREATE TABLE $tableActivities (
         id TEXT PRIMARY KEY,

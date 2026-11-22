@@ -1,8 +1,8 @@
 import 'dart:convert';
+import 'package:daymark/core/utils/date_utils.dart';
+import 'package:daymark/features/journal/domain/entities/journal_entry.dart';
+import 'package:daymark/features/summary/domain/entities/journal_summary.dart';
 import 'package:http/http.dart' as http;
-import '../../features/journal/domain/entities/journal_entry.dart';
-import '../../features/summary/domain/entities/journal_summary.dart';
-import '../utils/date_utils.dart';
 import 'ai_summary_service.dart';
 import 'local_heuristic_summary_service.dart';
 

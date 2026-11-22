@@ -1,8 +1,8 @@
+import 'package:daymark/core/utils/date_utils.dart';
+import 'package:daymark/features/summary/domain/entities/journal_summary.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
-import '../../features/summary/domain/entities/journal_summary.dart';
-import '../utils/date_utils.dart';
 
 class PdfExportService {
   /// Generate printable & shareable PDF for a JournalSummary
@@ -210,7 +210,7 @@ class PdfExportService {
       ),
       padding: const pw.EdgeInsets.only(left: 10, top: 2, bottom: 2),
       child: pw.Column(
-        crossAxisAlignment: pw.CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           pw.Text(
             title,

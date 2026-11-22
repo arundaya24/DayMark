@@ -1,9 +1,9 @@
+import 'package:daymark/core/constants/app_categories.dart';
+import 'package:daymark/core/constants/app_colors.dart';
+import 'package:daymark/core/constants/app_typography.dart';
+import 'package:daymark/core/utils/date_utils.dart';
+import 'package:daymark/features/journal/domain/entities/journal_entry.dart';
 import 'package:flutter/material.dart';
-import '../../../../core/constants/app_colors.dart';
-import '../../../../core/constants/app_typography.dart';
-import '../../../../core/constants/app_categories.dart';
-import '../../../../core/utils/date_utils.dart';
-import '../../domain/entities/journal_entry.dart';
 
 class JournalCard extends StatelessWidget {
   final JournalEntry entry;
@@ -32,7 +32,7 @@ class JournalCard extends StatelessWidget {
           color: AppColors.surface,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: entry.isPinned ? AppColors.primary.withOpacity(0.4) : AppColors.border,
+            color: entry.isPinned ? AppColors.primary.withValues(alpha: 0.4) : AppColors.border,
             width: entry.isPinned ? 1.5 : 1,
           ),
         ),
@@ -45,7 +45,7 @@ class JournalCard extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
-                    color: category.color.withOpacity(0.15),
+                    color: category.color.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Row(

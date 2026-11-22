@@ -1,12 +1,11 @@
+import 'package:daymark/core/constants/app_colors.dart';
+import 'package:daymark/core/constants/app_typography.dart';
+import 'package:daymark/features/journal/presentation/providers/journal_provider.dart';
+import 'package:daymark/features/journal/presentation/widgets/journal_card.dart';
+import 'package:daymark/features/journal/presentation/widgets/search_filter_bar.dart';
+import 'package:daymark/features/settings/presentation/providers/settings_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/constants/app_colors.dart';
-import '../../../../core/constants/app_typography.dart';
-import '../../../../core/utils/date_utils.dart';
-import '../../settings/presentation/providers/settings_provider.dart';
-import '../providers/journal_provider.dart';
-import '../widgets/journal_card.dart';
-import '../widgets/search_filter_bar.dart';
 import 'journal_detail_screen.dart';
 import 'journal_editor_screen.dart';
 

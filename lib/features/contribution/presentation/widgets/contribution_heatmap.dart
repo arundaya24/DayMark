@@ -1,9 +1,8 @@
+import 'package:daymark/core/constants/app_colors.dart';
+import 'package:daymark/core/constants/app_typography.dart';
+import 'package:daymark/core/utils/date_utils.dart';
+import 'package:daymark/features/journal/domain/repositories/journal_repository.dart';
 import 'package:flutter/material.dart';
-import '../../../../core/constants/app_colors.dart';
-import '../../../../core/constants/app_typography.dart';
-import '../../../../core/utils/date_utils.dart';
-import '../../journal/domain/entities/journal_entry.dart';
-import '../../journal/domain/repositories/journal_repository.dart';
 
 class ContributionHeatmap extends StatelessWidget {
   final Map<String, int> contributionMap;
@@ -14,7 +13,7 @@ class ContributionHeatmap extends StatelessWidget {
     super.key,
     required this.contributionMap,
     required this.repository,
-    this.weeksToShow = 18, // Shows ~4.5 months, scrollable for more
+    this.weeksToShow = 18,
   });
 
   Color _getCellColor(int count) {
@@ -29,13 +28,10 @@ class ContributionHeatmap extends StatelessWidget {
   Widget build(BuildContext context) {
     final today = AppDateUtils.toLocalDateOnly(DateTime.now());
     
-    // We want the grid to end on today.
-    // Calculate the start date so that the last column ends with today.
-    final currentWeekday = today.weekday; // 1 = Monday, 7 = Sunday
+    final currentWeekday = today.weekday;
     final totalDays = (weeksToShow - 1) * 7 + currentWeekday;
     final startDate = today.subtract(Duration(days: totalDays - 1));
 
-    // Build columns of weeks
     final List<List<DateTime>> weeks = [];
     DateTime cursor = startDate;
 
@@ -90,11 +86,10 @@ class ContributionHeatmap extends StatelessWidget {
           // Scrollable Heatmap Grid
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
-            reverse: true, // Scroll to show the most recent days on the right
+            reverse: true,
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Weekday labels
                 Padding(
                   padding: const EdgeInsets.only(right: 6, top: 2),
                   child: Column(
@@ -110,7 +105,6 @@ class ContributionHeatmap extends StatelessWidget {
                   ),
                 ),
 
-                // Heatmap Weeks
                 ...weeks.map((week) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 2.5),
@@ -131,7 +125,7 @@ class ContributionHeatmap extends StatelessWidget {
                               borderRadius: BorderRadius.circular(3),
                               border: Border.all(
                                 color: AppDateUtils.isSameDay(day, today)
-                                    ? AppColors.primaryLight.withOpacity(0.8)
+                                    ? AppColors.primaryLight.withValues(alpha: 0.8)
                                     : Colors.transparent,
                                 width: 1,
                               ),
@@ -251,7 +245,7 @@ class ContributionHeatmap extends StatelessWidget {
                     shrinkWrap: true,
                     itemCount: entries.length,
                     separatorBuilder: (_, __) => const Divider(color: AppColors.borderSubtle),
-                    itemBuilder: (_, index) {
+                    itemBuilder: (ctx, index) {
                       final item = entries[index];
                       return ListTile(
                         contentPadding: EdgeInsets.zero,

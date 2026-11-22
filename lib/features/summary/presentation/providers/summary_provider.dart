@@ -1,10 +1,10 @@
+import 'package:daymark/core/services/ai/ai_summary_service.dart';
+import 'package:daymark/core/services/ai/gemini_summary_service.dart';
+import 'package:daymark/core/services/ai/local_heuristic_summary_service.dart';
+import 'package:daymark/features/journal/presentation/providers/journal_provider.dart';
+import 'package:daymark/features/settings/presentation/providers/settings_provider.dart';
+import 'package:daymark/features/summary/domain/entities/journal_summary.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/services/ai/ai_summary_service.dart';
-import '../../../../core/services/ai/gemini_summary_service.dart';
-import '../../../../core/services/ai/local_heuristic_summary_service.dart';
-import '../../journal/presentation/providers/journal_provider.dart';
-import '../../settings/presentation/providers/settings_provider.dart';
-import '../domain/entities/journal_summary.dart';
 
 class SummaryState {
   final DateTime startDate;

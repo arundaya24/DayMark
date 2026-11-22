@@ -1,16 +1,17 @@
+import 'package:daymark/core/constants/app_colors.dart';
+import 'package:daymark/core/constants/app_typography.dart';
+import 'package:daymark/core/utils/date_utils.dart';
+import 'package:daymark/core/utils/streak_calculator.dart';
+import 'package:daymark/features/contribution/presentation/providers/contribution_provider.dart';
+import 'package:daymark/features/contribution/presentation/widgets/contribution_heatmap.dart';
+import 'package:daymark/features/contribution/presentation/widgets/streak_badge.dart';
+import 'package:daymark/features/journal/presentation/providers/journal_provider.dart';
+import 'package:daymark/features/journal/presentation/screens/journal_detail_screen.dart';
+import 'package:daymark/features/journal/presentation/screens/journal_editor_screen.dart';
+import 'package:daymark/features/journal/presentation/widgets/journal_card.dart';
+import 'package:daymark/features/settings/presentation/providers/settings_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/constants/app_colors.dart';
-import '../../../../core/constants/app_typography.dart';
-import '../../../../core/utils/date_utils.dart';
-import '../../contribution/presentation/providers/contribution_provider.dart';
-import '../../contribution/presentation/widgets/contribution_heatmap.dart';
-import '../../contribution/presentation/widgets/streak_badge.dart';
-import '../../journal/presentation/providers/journal_provider.dart';
-import '../../journal/presentation/screens/journal_detail_screen.dart';
-import '../../journal/presentation/screens/journal_editor_screen.dart';
-import '../../journal/presentation/widgets/journal_card.dart';
-import '../../settings/presentation/providers/settings_provider.dart';
 
 class DashboardScreen extends ConsumerWidget {
   const DashboardScreen({super.key});
@@ -67,7 +68,7 @@ class DashboardScreen extends ConsumerWidget {
                     streakStatsAsync.when(
                       data: (stats) => StreakBadge(currentStreak: stats.currentStreak),
                       loading: () => const SizedBox.shrink(),
-                      error: (_, __) => const SizedBox.shrink(),
+                      error: (err, stack) => const SizedBox.shrink(),
                     ),
                   ],
                 ),
@@ -84,7 +85,7 @@ class DashboardScreen extends ConsumerWidget {
                       end: Alignment.bottomRight,
                     ),
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: AppColors.primaryDark.withOpacity(0.5), width: 1),
+                    border: Border.all(color: AppColors.primaryDark.withValues(alpha: 0.5), width: 1),
                   ),
                   child: Row(
                     children: [
@@ -159,7 +160,7 @@ class DashboardScreen extends ConsumerWidget {
                     repository: repository,
                   ),
                   loading: () => const SizedBox.shrink(),
-                  error: (_, __) => const SizedBox.shrink(),
+                  error: (err, stack) => const SizedBox.shrink(),
                 ),
 
                 const SizedBox(height: 20),
@@ -168,7 +169,7 @@ class DashboardScreen extends ConsumerWidget {
                 streakStatsAsync.when(
                   data: (stats) => _buildMonthlyStatsCard(stats),
                   loading: () => const SizedBox.shrink(),
-                  error: (_, __) => const SizedBox.shrink(),
+                  error: (err, stack) => const SizedBox.shrink(),
                 ),
 
                 const SizedBox(height: 24),

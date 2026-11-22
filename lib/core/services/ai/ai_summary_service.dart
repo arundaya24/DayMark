@@ -1,5 +1,5 @@
-import '../../features/journal/domain/entities/journal_entry.dart';
-import '../../features/summary/domain/entities/journal_summary.dart';
+import 'package:daymark/features/journal/domain/entities/journal_entry.dart';
+import 'package:daymark/features/summary/domain/entities/journal_summary.dart';
 
 abstract class AiSummaryService {
   Future<JournalSummary> generateSummary({

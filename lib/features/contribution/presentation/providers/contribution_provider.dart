@@ -1,6 +1,6 @@
+import 'package:daymark/core/utils/streak_calculator.dart';
+import 'package:daymark/features/journal/presentation/providers/journal_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/utils/streak_calculator.dart';
-import '../../journal/presentation/providers/journal_provider.dart';
 
 final streakStatsProvider = FutureProvider<StreakStats>((ref) async {
   final repo = ref.watch(journalRepositoryProvider);

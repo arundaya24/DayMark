@@ -1,11 +1,11 @@
+import 'package:daymark/core/constants/app_categories.dart';
+import 'package:daymark/core/constants/app_colors.dart';
+import 'package:daymark/core/constants/app_typography.dart';
+import 'package:daymark/core/utils/date_utils.dart';
+import 'package:daymark/features/journal/domain/entities/journal_entry.dart';
+import 'package:daymark/features/journal/presentation/providers/journal_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/constants/app_colors.dart';
-import '../../../../core/constants/app_typography.dart';
-import '../../../../core/constants/app_categories.dart';
-import '../../../../core/utils/date_utils.dart';
-import '../../domain/entities/journal_entry.dart';
-import '../providers/journal_provider.dart';
 import 'journal_editor_screen.dart';
 
 class JournalDetailScreen extends ConsumerStatefulWidget {
@@ -108,9 +108,9 @@ class _JournalDetailScreenState extends ConsumerState<JournalDetailScreen> {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                     decoration: BoxDecoration(
-                      color: category.color.withOpacity(0.18),
+                      color: category.color.withValues(alpha: 0.18),
                       borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: category.color.withOpacity(0.4)),
+                      border: Border.all(color: category.color.withValues(alpha: 0.4)),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,

@@ -1,6 +1,6 @@
+import 'package:daymark/core/constants/app_colors.dart';
+import 'package:daymark/core/constants/app_typography.dart';
 import 'package:flutter/material.dart';
-import '../../../../core/constants/app_colors.dart';
-import '../../../../core/constants/app_typography.dart';
 
 class AiConfigDialog extends StatefulWidget {
   final String currentProvider;
@@ -54,23 +54,70 @@ class _AiConfigDialogState extends State<AiConfigDialog> {
             const SizedBox(height: 16),
             Text('SUMMARY PROVIDER', style: AppTypography.monoLabel),
             const SizedBox(height: 8),
-            RadioListTile<String>(
-              value: 'local',
-              groupValue: _provider,
-              activeColor: AppColors.primary,
-              title: Text('Local Heuristic Engine', style: AppTypography.titleMedium),
-              subtitle: Text('100% offline, privacy guaranteed, zero hallucination', style: AppTypography.bodySmall),
-              contentPadding: EdgeInsets.zero,
-              onChanged: (val) => setState(() => _provider = val!),
+            GestureDetector(
+              onTap: () => setState(() => _provider = 'local'),
+              child: Container(
+                padding: const EdgeInsets.all(12),
+                margin: const EdgeInsets.only(bottom: 8),
+                decoration: BoxDecoration(
+                  color: _provider == 'local' ? AppColors.primary.withValues(alpha: 0.12) : AppColors.surface,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: _provider == 'local' ? AppColors.primary : AppColors.border,
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      _provider == 'local' ? Icons.radio_button_checked : Icons.radio_button_off,
+                      color: _provider == 'local' ? AppColors.primary : AppColors.textMuted,
+                      size: 20,
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Local Heuristic Engine', style: AppTypography.titleMedium),
+                          Text('100% offline, privacy guaranteed, zero hallucination', style: AppTypography.bodySmall),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
-            RadioListTile<String>(
-              value: 'gemini',
-              groupValue: _provider,
-              activeColor: AppColors.primary,
-              title: Text('Google Gemini API', style: AppTypography.titleMedium),
-              subtitle: Text('Contextual LLM intelligence via REST API', style: AppTypography.bodySmall),
-              contentPadding: EdgeInsets.zero,
-              onChanged: (val) => setState(() => _provider = val!),
+            GestureDetector(
+              onTap: () => setState(() => _provider = 'gemini'),
+              child: Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: _provider == 'gemini' ? AppColors.primary.withValues(alpha: 0.12) : AppColors.surface,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: _provider == 'gemini' ? AppColors.primary : AppColors.border,
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      _provider == 'gemini' ? Icons.radio_button_checked : Icons.radio_button_off,
+                      color: _provider == 'gemini' ? AppColors.primary : AppColors.textMuted,
+                      size: 20,
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Google Gemini API', style: AppTypography.titleMedium),
+                          Text('Contextual LLM intelligence via REST API', style: AppTypography.bodySmall),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
             if (_provider == 'gemini') ...[
               const SizedBox(height: 14),
@@ -85,13 +132,17 @@ class _AiConfigDialogState extends State<AiConfigDialog> {
               Text('MODEL', style: AppTypography.monoLabel),
               const SizedBox(height: 6),
               DropdownButtonFormField<String>(
-                value: _model,
+                initialValue: _model,
                 dropdownColor: AppColors.surfaceElevated,
                 items: const [
                   DropdownMenuItem(value: 'gemini-1.5-flash', child: Text('Gemini 1.5 Flash (Fast)')),
                   DropdownMenuItem(value: 'gemini-1.5-pro', child: Text('Gemini 1.5 Pro (Deep)')),
                 ],
-                onChanged: (val) => setState(() => _model = val!),
+                onChanged: (val) {
+                  if (val != null) {
+                    setState(() => _model = val);
+                  }
+                },
               ),
             ],
           ],
